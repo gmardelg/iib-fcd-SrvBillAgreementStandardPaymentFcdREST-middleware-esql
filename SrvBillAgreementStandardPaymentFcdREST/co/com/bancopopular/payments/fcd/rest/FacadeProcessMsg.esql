@@ -1,0 +1,211 @@
+BROKER SCHEMA co.com.bancopopular.payments.fcd.rest
+/*****************************************************************************
+Módulo encargado del pre-procesamiento del mensaje en el servicio fachada
+encargado de exponer la funcionalidad para validar la información de los 
+conceptos asociados a un convenio desde el canal de oficinas a nivel nacional
+Autor		: Yesid Briceño
+*****************************************************************************/
+CREATE COMPUTE MODULE FacadeProcessMsgReqREST
+
+	/*****************************************************************************
+	Esta función procesa un mensaje REST entrante en el IBM Integration Bus usando 
+	ESQL. Prepara la estructura del mensaje de salida para el servicio específico
+	BillAgreementStandardPayment.Extrae y almacena la información relevante
+	de la cabecera y el cuerpo, para realizar la validación de las cabeceras HTTP
+	requeridas considerando la información del nodo trace. Si la validación es
+	correcta, configura las variables de entorno y las propiedades de búsqueda del
+	registro; de lo contrario, genera una excepción de usuario por una estructura
+	de solicitud incorrecta.
+	*****************************************************************************/
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+
+		-- Crear campos   
+		CREATE FIELD OutputRoot.Properties;
+		CREATE FIELD OutputRoot.MQMD;
+		CREATE FIELD OutputRoot.MQRFH2;
+		CREATE FIELD OutputRoot.JSON.Data;
+		CREATE FIELD Environment.Variables;
+
+		-- Declarar Referencias   
+		DECLARE refMQRFH2 		REFERENCE TO OutputRoot.MQRFH2;
+		DECLARE refOutputRoot 	REFERENCE TO OutputRoot.JSON.Data;
+		DECLARE refInputMsg		REFERENCE TO InputRoot.JSON.Data;
+		DECLARE refInputHdr		REFERENCE TO InputRoot.JSON.Data.trace;
+		DECLARE refInputPath	REFERENCE TO InputLocalEnvironment.HTTP.Input.Path;
+		DECLARE HTTP_COMMAN 	REFERENCE TO InputRoot.HTTPInputHeader."X-Original-HTTP-Command";
+		
+		-- Declarar Paths   
+		DECLARE serviceName		CHARACTER refInputPath.Segment[3];
+		DECLARE resourceName	CHARACTER refInputPath.Segment[4];
+		
+		-- NULL HTTPInputHeader
+		SET OutputRoot.HTTPInputHeader	= NULL;
+		SET OutputRoot.Properties		= InputRoot.Properties;
+		SET refOutputRoot				= refInputMsg;
+
+		-- Tomar identificador de cliente
+		SET refMQRFH2.usr.response.WS.replyIdentifier = InputLocalEnvironment.Destination.HTTP.RequestIdentifier;
+
+		-- Almacenar mensaje de entrada
+		CALL co.com.bancopopular.common.procedures.getRestHeaderValues(refInputHdr, refMQRFH2);
+		
+		-- Almacenar Body y Headers en MQRFH2
+		SET refMQRFH2.usr.msgOrig.Data.Body 								= refInputMsg;
+		SET refMQRFH2.usr.msgOrig.Data.Headers."X-Rquid" 					= refInputHdr."X-RqUID";
+		SET refMQRFH2.usr.msgOrig.Data.Headers."X-Original-HTTP-Command" 	= HTTP_COMMAN;
+
+		-- Guardar datos en cabecera para auditoría
+		SET refMQRFH2.usr.log.nameApplication 				= CTE_APPLICATION;
+		SET refMQRFH2.usr.log.consumerName 					= COALESCE(refInputHdr."X-Channel", CTE_BLANk_SPACE);
+		SET refMQRFH2.usr.log.idLog 						= CTE_ONE;
+		SET refMQRFH2.usr.log.transactionDate 				= co.com.bancopopular.common.functions.getTimeStampFormatOra();
+		SET refMQRFH2.usr.log.ipClient 						= COALESCE(refInputHdr."X.Client-Ip", refInputHdr."X-IPAddr");
+		SET refMQRFH2.usr.log.callType 						= CTE_SERVICE_TYPE;
+		SET refMQRFH2.usr.log.nmEms                         = COALESCE(refInputHdr."X-Channel", CTE_BLANk_SPACE);
+		SET refMQRFH2.usr.transactionInfoRq.transactionId	= refInputHdr."X-RqUID";
+		
+		-- Almacenar variables de usuario
+		SET Environment.Variables.usr	= refMQRFH2.usr;
+
+		IF (EXISTS(refInputHdr."X-RqUID"[]) AND TRIM(refInputHdr."X-RqUID") <> CTE_BLANk_SPACE) AND (EXISTS(refInputHdr."X-Channel"[]) AND TRIM(refInputHdr."X-Channel") <> CTE_BLANk_SPACE)
+			AND (EXISTS(refInputHdr."X-CompanyId"[]) AND TRIM(refInputHdr."X-CompanyId") <> CTE_BLANk_SPACE) THEN
+
+			-- Asignar nombre de archivo de configuración
+			SET OutputLocalEnvironment.ServiceRegistryLookupProperties.Name	= serviceName||resourceName||'.xml';
+			RETURN TRUE;
+		ELSE
+
+			-- Establece excepción y bandera por error en estructura de las cabeceras
+			SET Environment.Variables.usr.errorStructure = TRUE;
+			THROW USER EXCEPTION CATALOG 'FCD' MESSAGE 400 VALUES ('Error en la transacción', 'Petición Incorrecta');
+		END IF;
+		RETURN FALSE;
+	END;
+
+END MODULE;
+
+
+
+CREATE COMPUTE MODULE FacadeInfoErrorReqREST
+
+	/*****************************************************************************
+	Esta función registra el procesamiento de errores y la construcción de respuestas
+	para solicitudes REST. Procesa la información de excepciones, registro de logs,
+	gestiona encabezados MQ, recupera descripciones de errores y crea una respuesta
+	JSON estructurada con códigos de estado HTTP y encabezados apropiados.
+	*****************************************************************************/
+	CREATE FUNCTION Main () RETURNS BOOLEAN
+	BEGIN
+
+		CREATE FIELD OutputRoot.MQMD;
+
+		-- Valida existencia cabeceras MQRFH2
+		IF EXISTS(Environment.Variables.usr[]) THEN
+			SET OutputRoot.MQRFH2.usr = Environment.Variables.usr;
+		ELSE
+			CREATE FIELD OutputRoot.MQRFH2;
+		END IF;
+
+		CREATE FIELD OutputRoot.XMLNSC.exceptionReq;
+
+		-- Declaración Referencias
+		DECLARE refOut 			REFERENCE TO OutputRoot.XMLNSC.exceptionReq;
+		DECLARE refMQRFH2 		REFERENCE TO OutputRoot.MQRFH2;
+		DECLARE refInputPath	REFERENCE TO InputLocalEnvironment.HTTP.Input.Path;
+		DECLARE refInputHdr		Row;
+		
+		DECLARE codError, nameError, descError CHARACTER CTE_BLANk_SPACE;
+		DECLARE serviceName		CHARACTER refInputPath.Segment[3];
+
+		SET Environment.Variables.usr.log.nameSrv	= serviceName;
+		SET OutputRoot.MQRFH2.usr.log.idLog			= Environment.Variables.usr.log.idLog;
+
+		-- Declarar referencia a lista de excepciones técnicas.
+		DECLARE refExceptionList REFERENCE TO InputExceptionList;
+
+		CALL co.com.bancopopular.common.procedures.getDescriptionExceptionList(refExceptionList, codError, nameError, descError);
+
+		-- Construcción árbol de excepciones
+		IF EXISTS(InputLocalEnvironment.HTTP.Input.Timeout[]) THEN
+			DECLARE refTimeout REFERENCE TO InputRoot.XMLNSC;
+			MOVE refTimeout LASTCHILD;
+			MOVE refTimeout LASTCHILD;
+			MOVE refTimeout LASTCHILD;
+			SET codError	= refTimeout.*:Code.*:Subcode.*:Value;
+			SET nameError	= refTimeout.*:Reason.*:Text;
+			SET descError	= refTimeout.*:Detail.*:text;
+			
+			-- Recuperar cuerpo del mensaje 
+			DECLARE Body BLOB;
+			SET Body = InputLocalEnvironment.HTTP.Input.Timeout.OriginalInboundMessage;
+			CREATE LASTCHILD OF OutputRoot DOMAIN 'JSON' PARSE(Body OPTIONS RootBitStream);
+			
+			-- Recuperar Headers del mensaje 
+			SET refInputHdr 			= OutputRoot.JSON.Data.trace;
+			SET OutputRoot.JSON 		= NULL;
+		
+		ELSE
+			-- Recuperar Headers del mensaje 
+			SET refInputHdr 			= InputRoot.JSON.Data.trace;
+		END IF;
+
+		SET refOut.exception.code		= codError;
+		SET refOut.exception.desc		= nameError || ' : ' || descError;
+
+		--Envia mensaje a componente de excepciones
+		PROPAGATE TO TERMINAL 'out1' DELETE NONE;
+
+		SET OutputRoot.XMLNSC 	= NULL;
+		SET OutputRoot.MQMD		= NULL;
+		SET OutputRoot.MQRFH2 	= NULL;
+
+		--Homologación de Error
+		DECLARE refObjError REFERENCE TO Environment.Variables.objError;
+		CALL co.com.bancopopular.common.procedures.cache.getDataErrorCache(codError, CTE_ERRORS, CTE_BPOP, refObjError);
+
+		DECLARE codErrorTx 				CHARACTER COALESCE(refObjError.codeError, codError);
+		DECLARE descErrorTx 			CHARACTER COALESCE(refObjError.descError, nameError || ' :: ' || descError);
+		DECLARE severityTx 				CHARACTER COALESCE(refObjError.severity, CTE_ERROR);
+		DECLARE additionalStatusDesc 	CHARACTER nameError || ' : ' || descError;
+
+		--Establece información de cabeceras
+		IF NOT EXISTS(refInputHdr."X-RqUID"[]) OR TRIM(refInputHdr."X-RqUID") = CTE_BLANk_SPACE THEN
+			SET OutputLocalEnvironment.Destination.HTTP.ReplyStatusCode = CTE_CODE_412;
+			SET additionalStatusDesc									= CTE_DESC_RQUID_ERROR;
+		ELSEIF Environment.Variables.usr.errorStructure THEN
+			SET OutputLocalEnvironment.Destination.HTTP.ReplyStatusCode = CTE_CODE_400;
+			SET additionalStatusDesc									= CTE_DESC_HEADERS_ERROR;
+		ELSEIF EXISTS(InputLocalEnvironment.HTTP.Input.Timeout[]) THEN
+			SET OutputLocalEnvironment.Destination.HTTP.ReplyStatusCode = CTE_CODE_504;
+		ELSEIF codError = CTE_THREE OR codError = CTE_FOUR THEN
+			SET OutputLocalEnvironment.Destination.HTTP.ReplyStatusCode = CTE_CODE_501;
+		ELSE
+			SET OutputLocalEnvironment.Destination.HTTP.ReplyStatusCode = CTE_CODE_500;
+		END IF;
+
+		SET OutputLocalEnvironment.Destination.HTTP.RequestIdentifier = COALESCE(refMQRFH2.usr.response.WS.replyIdentifier, InputLocalEnvironment.Destination.HTTP.RequestIdentifier);
+
+		--Creación estructura respuesta al canal.
+		CREATE FIELD OutputRoot.HTTPResponseHeader;
+		CREATE FIELD OutputRoot.JSON.Data;
+		DECLARE refOutputRoot REFERENCE TO OutputRoot.JSON.Data;
+
+		SET OutputRoot.HTTPResponseHeader."X-RqUID" 						= refInputHdr."X-RqUID";
+		SET OutputRoot.HTTPResponseHeader."X-ApprovalId" 					= CTE_ZERO;
+
+		SET refOutputRoot.MsgRsHdr.Status.StatusCode						= codErrorTx;
+		SET refOutputRoot.MsgRsHdr.Status.Severity							= severityTx;
+		SET refOutputRoot.MsgRsHdr.Status.StatusDesc						= descErrorTx;
+
+		--Additional Status
+		SET refOutputRoot.MsgRsHdr.Status.AdditionalStatus.ServerStatusCode	= codError;
+		SET refOutputRoot.MsgRsHdr.Status.AdditionalStatus.Severity			= severityTx;
+		SET refOutputRoot.MsgRsHdr.Status.AdditionalStatus.StatusDesc		= additionalStatusDesc;
+		SET refOutputRoot.MsgRsHdr.Status.EndDt								= CAST(CURRENT_TIMESTAMP AS CHARACTER FORMAT 'yyyy-MM-dd''T''HH:mm:ss.SSSS');
+
+		PROPAGATE TO TERMINAL 'out';
+		RETURN FALSE;
+	END;
+
+END MODULE;

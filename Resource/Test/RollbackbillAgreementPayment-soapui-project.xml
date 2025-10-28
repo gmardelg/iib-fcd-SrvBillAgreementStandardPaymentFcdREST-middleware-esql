@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="a3774836-afa1-4a07-9f8f-ae4c21ebe801" activeEnvironment="Default" name="BillAgreementStandardPaymentRollback" resourceRoot="" soapui-version="5.6.1" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:RestService" id="ecd77b08-4a81-4549-a815-b277b79d94cf" wadlVersion="http://wadl.dev.java.net/2009/02" name="BillAgreementStandardPayment" type="rest" basePath="/agreementsManagement/v1/Payments/Bill" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:description>Servicio diseñado para la notificación o pago de conceptos asociados a un convenio. Este servicio estándar para banco Popular permite el recaudo desde el canal de oficinas a nivel nacional (Sofia).</con:description><con:settings/><con:definitionCache type="TEXT" rootPart=""/><con:endpoints><con:endpoint>https://10.200.157.5:7859</con:endpoint><con:endpoint>https://10.213.130.25:55584</con:endpoint></con:endpoints><con:resource name="/Rollback" path="/Rollback" id="387b99f3-6299-41d6-8954-acc01e5a73b9"><con:settings/><con:parameters/><con:method name="RollbackbillAgreementPayment" id="4919c356-5d41-4af6-92b9-82a12385f259" method="POST"><con:description>Reversar la notificación o pago de los conceptos asociados a un convenio desde el canal de oficinas a nivel nacional (Sofia)&#13;
+Reversar notificación del recaudo asociado a un convenio.</con:description><con:settings/><con:parameters/><con:representation type="RESPONSE"><con:mediaType>application/json</con:mediaType><con:status>200 201</con:status><con:params/></con:representation><con:representation type="RESPONSE"><con:mediaType>application/json</con:mediaType><con:status>206</con:status><con:params/></con:representation><con:representation type="RESPONSE"><con:mediaType>application/json</con:mediaType><con:status>404</con:status><con:params/></con:representation><con:representation type="RESPONSE"><con:mediaType>application/json</con:mediaType><con:status>500</con:status><con:params/></con:representation><con:representation type="REQUEST"><con:mediaType>application/json</con:mediaType><con:params/></con:representation><con:representation type="FAULT"><con:mediaType>application/json;charset=UTF-8</con:mediaType><con:status>500</con:status><con:params/><con:element xmlns:rol="https://10.200.157.5/Payment/BillAgreement/Rollback">rol:Fault</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType>application/json; charset=utf-8</con:mediaType><con:status>206 200 201</con:status><con:params/><con:element xmlns:rol="https://10.200.157.5/Payment/BillAgreement/Rollback">rol:Response</con:element></con:representation><con:representation type="FAULT"><con:mediaType>text/html; charset=utf-8</con:mediaType><con:status>500</con:status><con:params/><con:element>html</con:element></con:representation><con:representation type="FAULT"><con:mediaType>application/json; charset=utf-8</con:mediaType><con:status>500 400 504 408 501 412</con:status><con:params/><con:element xmlns:rol="https://10.200.157.5/Payment/BillAgreement/Rollback">rol:Fault</con:element></con:representation><con:representation type="FAULT"><con:mediaType>text/xml; charset=utf-8</con:mediaType><con:status>504</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType>text/xml; charset=utf-8</con:mediaType><con:status>200</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType>text/plain;charset=utf-8</con:mediaType><con:status>404</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType>application/json</con:mediaType><con:status>500</con:status><con:params/><con:element xmlns:rol="https://10.200.157.5/Payment/BillAgreement/Rollback">rol:Fault</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:request name="Exitoso" id="bdec2ec5-4c91-4271-853e-2ac4d0676c99" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting><con:setting id="com.eviware.soapui.impl.support.AbstractHttpRequest@follow-redirects">true</con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://10.200.157.5:7859</con:endpoint><con:request>{
+  "trace": {
+    "X-RqUID": "${=java.lang.System.currentTimeMillis()}",
+    "X-Channel": "CANALES",
+    "X-CompanyId": "0002",
+    "X-GovIssueIdentType": "CC",
+    "X-IdentSerialNum": "79845117",
+    "X-Version": "1.0",
+    "X-BankIdType": "002",
+    "X-BankId": "002",
+    "X-BranchId": "040",
+    "X-BranchName": "W010956GZQ27",
+    "X-IPAddr": "192.10.20.123",
+    "X-KeyAcctId": "2",
+    "X-NextDay": "${=(new Date() + 1).format("yyyy-MM-dd'T'HH:mm:ss")}",
+    "X-Reverse": true
+  },
+  "Period": "${=new Date().format("yyyy-MM-dd'T'HH:mm:ss")}",
+  "InvoiceInfo": {
+    "CodeIAC": "7709998086715",
+    "InvoiceNum": "202500105",
+    "Amt": 264500,
+    "RqUID": "1753305599010"
+  }
+}
+</con:request><con:originalUri>https://10.200.157.5/Payment/BillAgreement/Rollback</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/><con:parameterOrder/></con:request><con:request name="Error de Negocio" id="aa384ae9-635d-4ce2-ad48-956e7a375b36" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://10.200.157.5:7859</con:endpoint><con:request>{
+  "trace": {
+    "X-RqUID": "${=java.lang.System.currentTimeMillis()}",
+    "X-Channel": "CANALES",
+    "X-CompanyId": "0002",
+    "X-GovIssueIdentType": "CC",
+    "X-IdentSerialNum": "79845117",
+    "X-Version": "1.0",
+    "X-BankIdType": "002",
+    "X-BankId": "002",
+    "X-BranchId": "040",
+    "X-BranchName": "W010956GZQ27",
+    "X-IPAddr": "192.10.20.123",
+    "X-KeyAcctId": "2",
+    "X-NextDay": "${=(new Date() + 1).format("yyyy-MM-dd'T'HH:mm:ss")}",
+    "X-Reverse": true
+  },
+  "Period": "${=new Date().format("yyyy-MM-dd'T'HH:mm:ss")}",
+  "InvoiceInfo": {
+    "CodeIAC": "7709998086715",
+    "InvoiceNum": "6465456",
+    "Amt": 654564,
+    "RqUID": "54545"
+  }
+}</con:request><con:originalUri>https://10.200.157.5/agreementsManagement/v1/Payments/Bill/Rollback</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/><con:parameterOrder/></con:request><con:request name="Error Validación De Estructura" id="6957a960-71cb-4a82-b233-1b1930d2020d" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://10.213.130.25:55584</con:endpoint><con:request>{
+  "trace": {
+    "X-RqUID": "${=java.lang.System.currentTimeMillis()}",
+    "X-Channel": "CANALES",
+    "X-CompanyId": "0002",
+    "X-GovIssueIdentType": "CC",
+    "X-IdentSerialNum": "79845117",
+    "X-Version": "1.0",
+    "X-BankIdType": "002",
+    "X-BankId": "002",
+    "X-BranchId": "040",
+    "X-BranchName": "W010956GZQ27",
+    "X-IPAddr": "192.10.20.123",
+    "X-KeyAcctId": "2",
+    "X-NextDay": "${=(new Date() + 1).format("yyyy-MM-dd'T'HH:mm:ss")}",
+    "X-Reverse": true
+  },
+  "Period": "${=new Date().format("yyyy-MM-dd'T'HH:mm:ss")}",
+  "InvoiceInfo": {
+    "CodeIAC": "7709998086715",
+    "Amt": 654564,
+    "RqUID": "54545"
+  }
+}</con:request><con:originalUri>https://10.200.157.5/agreementsManagement/v1/Payments/Bill/Rollback</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/><con:parameterOrder/></con:request></con:method></con:resource></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/><con:sensitiveInformation/></con:soapui-project>

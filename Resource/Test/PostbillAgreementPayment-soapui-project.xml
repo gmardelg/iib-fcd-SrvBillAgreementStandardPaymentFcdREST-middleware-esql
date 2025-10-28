@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="a3774836-afa1-4a07-9f8f-ae4c21ebe801" activeEnvironment="Default" name="BillAgreementStandardPayment" resourceRoot="" soapui-version="5.6.1" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:RestService" id="ecd77b08-4a81-4549-a815-b277b79d94cf" wadlVersion="http://wadl.dev.java.net/2009/02" name="BillAgreementStandardPayment" type="rest" basePath="/agreementsManagement/v1/Payments/Agreement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:description>Servicio diseñado para la notificación o pago de conceptos asociados a un convenio. Este servicio estándar para banco Popular permite el recaudo desde el canal de oficinas a nivel nacional (Sofia).</con:description><con:settings/><con:definitionCache type="TEXT" rootPart=""/><con:endpoints><con:endpoint>https://10.200.157.5:7859</con:endpoint><con:endpoint>https://10.213.130.25:55584</con:endpoint></con:endpoints><con:resource name="/Notify" path="/Notify" id="4f3a8078-904e-427d-8715-e7539bbcf38c"><con:settings/><con:parameters/><con:method name="PostbillAgreementPayment" id="1b090199-144f-42c6-8520-01d9cf205796" method="POST"><con:description>Notificación o pago de los conceptos asociados a un convenio desde el canal de oficinas a nivel nacional (Sofia)&#13;
+Notificación del recaudo asociado a un convenio.</con:description><con:settings><con:setting id="RecordResponseRepresentations">false</con:setting></con:settings><con:parameters/><con:representation type="RESPONSE"><con:mediaType>application/json</con:mediaType><con:status>200</con:status><con:params/></con:representation><con:representation type="RESPONSE"><con:mediaType>application/json</con:mediaType><con:status>206</con:status><con:params/></con:representation><con:representation type="RESPONSE"><con:mediaType>application/json</con:mediaType><con:status>404</con:status><con:params/></con:representation><con:representation type="RESPONSE"><con:mediaType>application/json</con:mediaType><con:status>500</con:status><con:params/></con:representation><con:representation type="REQUEST"><con:mediaType>application/json</con:mediaType><con:params/></con:representation><con:representation type="FAULT"><con:mediaType>application/json</con:mediaType><con:status>500</con:status><con:params/><con:element xmlns:not="https://10.200.157.5/Payment/BillAgreement/Notify">not:Fault</con:element></con:representation><con:representation type="FAULT"><con:mediaType>application/json;charset=UTF-8</con:mediaType><con:status>500</con:status><con:params/><con:element xmlns:not="https://10.200.157.5/Payment/BillAgreement/Notify">not:Fault</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType>application/json; charset=utf-8</con:mediaType><con:status>206 200 201</con:status><con:params/><con:element xmlns:not="https://10.200.157.5/Payment/BillAgreement/Notify">not:Response</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType>text/html; charset=utf-8</con:mediaType><con:status>500</con:status><con:params/><con:element>html</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType>text/html;charset=utf-8</con:mediaType><con:status>504</con:status><con:params/><con:element>html</con:element></con:representation><con:representation type="FAULT"><con:mediaType>application/json; charset=utf-8</con:mediaType><con:status>500 400 501 504 408 412</con:status><con:params/><con:element xmlns:not="https://10.200.157.5/Payment/BillAgreement/Notify">not:Fault</con:element></con:representation><con:representation type="FAULT"><con:mediaType>text/xml; charset=utf-8</con:mediaType><con:status>504</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType>text/xml; charset=utf-8</con:mediaType><con:status>200</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType>text/plain;charset=utf-8</con:mediaType><con:status>404</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:request name="Exitoso" id="2348594f-ea8d-4bda-ab2f-9fabffb5106e" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://10.200.157.5:7859</con:endpoint><con:request>{
+  "trace": {
+    "X-RqUID": "${=java.lang.System.currentTimeMillis()}",
+    "X-Channel": "CANALES",
+    "X-CompanyId": "0002",
+    "X-GovIssueIdentType": "CC",
+    "X-IdentSerialNum": "79845117",
+    "X-Version": "1.0",
+    "X-BankIdType": "002",
+    "X-BankId": "002",
+    "X-BranchId": "040",
+    "X-BranchName": "W010956GZQ27",
+    "X-IPAddr": "192.10.20.123",
+    "X-KeyAcctId": "2",
+    "X-NextDay": "${=(new Date() + 1).format("yyyy-MM-dd'T'HH:mm:ss")}"
+  },
+    "Period": "${=new Date().format("yyyy-MM-dd'T'HH:mm:ss")}",
+    "InvoiceInfo": {
+        "AgrmId": "3356",
+        "SvcId": "RB00",
+        "InvoiceNum": "202500105",
+        "Amt": 264500,
+        "CodeIAC": "7709998086715",
+        "ExpDt": "2025-01-24",
+        "PmtType": "EF",
+        "ChType": "BPOP"
+    },
+    "PmtReferences": [
+        {
+            "Reference1": "202500105",
+            "Reference2": "Prueba2",
+            "Reference3": "Prueba3",
+            "Reference4": "Prueba4",
+            "Reference5": "Prueba5"
+        }
+    ],
+    "CustId": {
+        "CustIdentType": "1",
+        "CustIdentNum": "106246212"
+    },
+    "PersonInfo": {
+        "CustId": {
+            "CustIdentType": "1",
+            "CustIdentNum": "106246212"
+        },
+        "CustName": {
+            "FirstName": "Andres",
+            "MiddleName": "Felipe",
+            "LastName": "Arias",
+            "SecondLastName": "Gonzalez"
+        },
+        "Addr1": "Car. 3#12-28",
+        "Desc": "Cuenta de nomina"
+    },
+    "AdditionalData": {
+        "CustId": {
+            "CustIdentType": "0",
+            "CustIdentNum": "139712658713"
+        },
+        "CustName": {
+            "Names": "Empresa",
+            "Surnames": "Empresa"
+        },
+        "Addr1": "Car. 3A#17-28"
+    }
+}</con:request><con:originalUri>https://10.200.157.5/Payment/BillAgreement/Notify</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/><con:parameterOrder/></con:request><con:request name="Error de Negocio" id="253d8e44-ec86-4543-9b22-93d0eebf2c9c" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://10.200.157.5:7859</con:endpoint><con:request>{
+   "trace": {
+      "X-RqUID": "${=java.lang.System.currentTimeMillis()}",
+      "X-Channel": "CANALES",
+      "X-CompanyId": "0002",
+      "X-GovIssueIdentType": "CC",
+      "X-IdentSerialNum": "79845117",
+      "X-Version": "1.0",
+      "X-BankIdType": "002",
+      "X-BankId": "002",
+      "X-BranchId": "040",
+      "X-BranchName": "W010956GZQ27",
+      "X-IPAddr": "192.10.20.123",
+      "X-KeyAcctId": "2",
+      "X-NextDay": "${=(new Date() + 1).format("yyyy-MM-dd'T'HH:mm:ss")}"
+   },
+   "Period": "${=new Date().format("yyyy-MM-dd'T'HH:mm:ss")}",
+   "InvoiceInfo": {
+      "AgrmId": "3356",
+      "SvcId": "RB00",
+      "InvoiceNum": "202422421",
+      "Amt": 25100,
+      "CodeIAC": "7709998086715",
+      "ExpDt": "2025-01-24",
+      "PmtType": "CH"
+   },
+   "PmtReferences": [
+      {
+         "Reference1": "202422421"
+      }
+   ]
+}</con:request><con:originalUri>https://10.200.157.5/agreementsManagement/v1/Payments/Agreement/Notify</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/><con:parameterOrder/></con:request><con:request name="Error Validación De Estructura" id="5d4385e6-ebbc-4635-9261-702e096b7cea" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://10.213.130.25:55584</con:endpoint><con:request>{
+  "trace": {
+    "X-RqUID": "${=java.lang.System.currentTimeMillis()}",
+    "X-Channel": "CANALES",
+    "X-CompanyId": "0002",
+    "X-GovIssueIdentType": "CC",
+    "X-IdentSerialNum": "79845117",
+    "X-Version": "1.0",
+    "X-BankIdType": "002",
+    "X-BankId": "002",
+    "X-BranchId": "040",
+    "X-BranchName": "W010956GZQ27",
+    "X-IPAddr": "192.10.20.123",
+    "X-KeyAcctId": "2",
+    "X-NextDay": "${=(new Date() + 1).format("yyyy-MM-dd'T'HH:mm:ss")}"
+  },
+  "Period": "${=new Date().format("yyyy-MM-dd'T'HH:mm:ss")}",
+  "InvoiceInfo": {
+    "AgrmId": "3356",
+    "SvcId": "RB00",
+    "Amt": 25100,
+    "CodeIAC": "7709998086715",
+    "ExpDt": "2025-01-24",
+    "PmtType": "CH",
+    "ChType": "BPOP"
+  },
+  "PmtReferences": [
+    {
+      "Reference1": "202422421"
+    }
+  ]
+}</con:request><con:originalUri>https://10.200.157.5/agreementsManagement/v1/Payments/Agreement/Notify</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/><con:parameterOrder/></con:request></con:method></con:resource></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
