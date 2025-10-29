@@ -7,6 +7,12 @@
     <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/SrvBillAgreementStandardPaymentFcdREST/icons/full/obj16/SrvBillAgreementPaymentFcdREST_REQ.gif"/>
     <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/SrvBillAgreementStandardPaymentFcdREST/icons/full/obj30/SrvBillAgreementPaymentFcdREST_REQ.gif"/>
     <composition>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="589,169" dataSource="AUDITORIA" computeExpression="esql://routine/common.modules.fcd#Facade_RouteMsg_WS_V3.Main" computeMode="destinationAndMessage">
+        <translation xmi:type="utility:ConstantString" string="CmpRouteMsg"/>
+      </nodes>
+      <nodes xmi:type="ComIbmSOAPInput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_6" location="116,172" wsdlOperationMode="gateway" useHTTPTransport="true" urlSelector="/agreementsManagement/v1/Payments/Agreement/Notify" useHTTPS="true" maxClientWaitTime="30" parserXmlnscBuildTreeUsingXMLSchema="false" validateMaster="none">
+        <translation xmi:type="utility:ConstantString" string="SOAPInput_HTTPS"/>
+      </nodes>
       <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="441,127" queueName="EXCEPTION.REGISTER.REQ" transactionMode="no">
         <translation xmi:type="utility:ConstantString" string="EXCEPTION.REGISTER.REQ"/>
       </nodes>
