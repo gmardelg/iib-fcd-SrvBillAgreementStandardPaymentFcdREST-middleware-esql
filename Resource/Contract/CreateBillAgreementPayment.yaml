@@ -1,0 +1,220 @@
+Nombre del archivo: CreateBillAgreementPayment.yaml
+
+openapi: 3.0.1
+info:
+  title: BillAgreementStandardPayment
+  description: Servicio diseñado para la creación y registro de pagos asociados a un convenio. El método POST /Create permite registrar un nuevo pago o notificación de recaudo desde el canal de oficinas (Sofia).
+  version: 1.0.0
+servers:
+- url: https://agreementsManagement/v1/Payments/Bill
+paths:
+  /Create:
+    post:
+      tags:
+      - /Create
+      summary: Crear notificación de pago asociado a un convenio.
+      description: Crear y registrar la notificación o pago de los conceptos asociados a un convenio desde el canal de oficinas a nivel nacional (Sofia)
+      operationId: CreatebillAgreementPayment
+      requestBody:
+        content:
+          application/json; charset=utf-8:
+            schema:
+              $ref: '#/components/schemas/ReqbillAgreement'
+        required: true
+      responses:
+        "201":
+          description: Transacción Exitosa
+          headers:
+            X-ApprovalId:
+              description: Número de autorización de la transacción
+              schema:
+                type: string
+            X-RqUID:
+              description: Identificador Unico de la transacción
+              schema:
+                type: string
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/RespbillAgreement'
+        "206":
+          description: Se genero un error de negocio
+          headers:
+            X-ApprovalId:
+              description: Número de autorización de la transacción
+              schema:
+                type: string
+            X-RqUID:
+              description: Identificador Unico de la transacción
+              schema:
+                type: string
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/ErrorbillAgreement'
+        "400":
+          description: Petición incorrecta
+          headers:
+            X-ApprovalId:
+              description: Número de autorización de la transacción
+              schema:
+                type: string
+            X-RqUID:
+              description: Identificador Unico de la transacción
+              schema:
+                type: string
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/ErrorbillAgreement'
+        "408":
+          description: Timeout del backend
+          headers:
+            X-ApprovalId:
+              description: Número de autorización de la transacción
+              schema:
+                type: string
+            X-RqUID:
+              description: Identificador Unico de la transacción
+              schema:
+                type: string
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/ErrorbillAgreement'
+        "412":
+          description: RqUI requerido
+          headers:
+            X-ApprovalId:
+              description: Número de autorización de la transacción
+              schema:
+                type: string
+            X-RqUID:
+              description: Identificador Unico de la transacción
+              schema:
+                type: string
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/ErrorbillAgreement'
+        "420":
+          description: Error en el backend
+          headers:
+            X-ApprovalId:
+              description: Número de autorización de la transacción
+              schema:
+                type: string
+            X-RqUID:
+              description: Identificador Unico de la transacción
+              schema:
+                type: string
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/ErrorbillAgreement'
+        "500":
+          description: Error interno en el servidor
+          headers:
+            X-ApprovalId:
+              description: Número de autorización de la transacción
+              schema:
+                type: string
+            X-RqUID:
+              description: Identificador Unico de la transacción
+              schema:
+                type: string
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/ErrorbillAgreement'
+        "508":
+          description: Timeout
+          headers:
+            X-ApprovalId:
+              description: Número de autorización de la transacción
+              schema:
+                type: string
+            X-RqUID:
+              description: Identificador Unico de la transacción
+              schema:
+                type: string
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/ErrorbillAgreement'
+components:
+  schemas:
+    ReqbillAgreement:
+      type: object
+      required:
+        - agreementId
+        - amount
+        - paymentConcept
+      properties:
+        agreementId:
+          type: string
+          description: Identificador único del convenio
+          example: "AGR-2025-001234"
+        amount:
+          type: number
+          format: double
+          description: Monto del pago a registrar
+          example: 150000.00
+        paymentConcept:
+          type: string
+          description: Concepto del pago
+          example: "Pago de cuota mensual"
+        paymentDate:
+          type: string
+          format: date
+          description: Fecha del pago
+          example: "2025-11-04"
+        reference:
+          type: string
+          description: Referencia adicional del pago
+          example: "REF-2025-11-04-001"
+    RespbillAgreement:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          description: Identificador de la transacción procesada
+          example: "TXN-2025-001234"
+        agreementId:
+          type: string
+          description: Identificador del convenio
+          example: "AGR-2025-001234"
+        status:
+          type: string
+          enum:
+            - "SUCCESS"
+            - "PENDING"
+            - "PROCESSED"
+          description: Estado de la transacción
+          example: "SUCCESS"
+        processedAmount:
+          type: number
+          format: double
+          description: Monto procesado
+          example: 150000.00
+        processedDate:
+          type: string
+          format: date-time
+          description: Fecha y hora de procesamiento
+          example: "2025-11-04T14:30:00Z"
+    ErrorbillAgreement:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          description: Código de error
+          example: "ERR-001"
+        errorMessage:
+          type: string
+          description: Mensaje descriptivo del error
+          example: "El convenio no existe en el sistema"
+        timestamp:
+          type: string
+          format: date-time
+          description: Fecha y hora del error
+          example: "2025-11-04T14:30:00Z"

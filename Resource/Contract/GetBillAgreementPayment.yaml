@@ -1,0 +1,260 @@
+Nombre del archivo: GetBillAgreementPayment.yaml
+
+openapi: 3.0.1
+info:
+  title: BillAgreementStandardPayment
+  description: Servicio diseñado para la consulta y obtención del historial de pagos asociados a un convenio. El método GET /Retrieve permite consultar el estado y detalles de los pagos registrados desde el canal de oficinas (Sofia).
+  version: 1.0.0
+servers:
+- url: https://agreementsManagement/v1/Payments/Bill
+paths:
+  /Retrieve/{agreementId}:
+    get:
+      tags:
+      - /Retrieve
+      summary: Obtener historial de pagos de un convenio.
+      description: Consultar y obtener el historial completo de pagos y notificaciones de recaudos asociados a un convenio desde el canal de oficinas a nivel nacional (Sofia)
+      operationId: GetbillAgreementPayment
+      parameters:
+        - name: agreementId
+          in: path
+          description: Identificador único del convenio
+          required: true
+          schema:
+            type: string
+          example: "AGR-2025-001234"
+        - name: startDate
+          in: query
+          description: Fecha inicial para filtrar el historial
+          required: false
+          schema:
+            type: string
+            format: date
+          example: "2025-01-01"
+        - name: endDate
+          in: query
+          description: Fecha final para filtrar el historial
+          required: false
+          schema:
+            type: string
+            format: date
+          example: "2025-11-04"
+      responses:
+        "200":
+          description: Consulta Exitosa
+          headers:
+            X-ApprovalId:
+              description: Número de autorización de la transacción
+              schema:
+                type: string
+            X-RqUID:
+              description: Identificador Unico de la transacción
+              schema:
+                type: string
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/RespGetbillAgreement'
+        "206":
+          description: Se genero un error de negocio
+          headers:
+            X-ApprovalId:
+              description: Número de autorización de la transacción
+              schema:
+                type: string
+            X-RqUID:
+              description: Identificador Unico de la transacción
+              schema:
+                type: string
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/ErrorbillAgreement'
+        "400":
+          description: Petición incorrecta
+          headers:
+            X-ApprovalId:
+              description: Número de autorización de la transacción
+              schema:
+                type: string
+            X-RqUID:
+              description: Identificador Unico de la transacción
+              schema:
+                type: string
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/ErrorbillAgreement'
+        "404":
+          description: Convenio no encontrado
+          headers:
+            X-ApprovalId:
+              description: Número de autorización de la transacción
+              schema:
+                type: string
+            X-RqUID:
+              description: Identificador Unico de la transacción
+              schema:
+                type: string
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/ErrorbillAgreement'
+        "408":
+          description: Timeout del backend
+          headers:
+            X-ApprovalId:
+              description: Número de autorización de la transacción
+              schema:
+                type: string
+            X-RqUID:
+              description: Identificador Unico de la transacción
+              schema:
+                type: string
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/ErrorbillAgreement'
+        "412":
+          description: RqUI requerido
+          headers:
+            X-ApprovalId:
+              description: Número de autorización de la transacción
+              schema:
+                type: string
+            X-RqUID:
+              description: Identificador Unico de la transacción
+              schema:
+                type: string
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/ErrorbillAgreement'
+        "420":
+          description: Error en el backend
+          headers:
+            X-ApprovalId:
+              description: Número de autorización de la transacción
+              schema:
+                type: string
+            X-RqUID:
+              description: Identificador Unico de la transacción
+              schema:
+                type: string
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/ErrorbillAgreement'
+        "500":
+          description: Error interno en el servidor
+          headers:
+            X-ApprovalId:
+              description: Número de autorización de la transacción
+              schema:
+                type: string
+            X-RqUID:
+              description: Identificador Unico de la transacción
+              schema:
+                type: string
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/ErrorbillAgreement'
+        "508":
+          description: Timeout
+          headers:
+            X-ApprovalId:
+              description: Número de autorización de la transacción
+              schema:
+                type: string
+            X-RqUID:
+              description: Identificador Unico de la transacción
+              schema:
+                type: string
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/ErrorbillAgreement'
+components:
+  schemas:
+    RespGetbillAgreement:
+      type: object
+      properties:
+        agreementId:
+          type: string
+          description: Identificador del convenio
+          example: "AGR-2025-001234"
+        totalAmount:
+          type: number
+          format: double
+          description: Monto total del convenio
+          example: 1000000.00
+        paidAmount:
+          type: number
+          format: double
+          description: Monto total pagado
+          example: 450000.00
+        pendingAmount:
+          type: number
+          format: double
+          description: Monto pendiente por pagar
+          example: 550000.00
+        paymentHistory:
+          type: array
+          description: Historial de pagos registrados
+          items:
+            $ref: '#/components/schemas/PaymentDetail'
+    PaymentDetail:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          description: Identificador único de la transacción
+          example: "TXN-2025-001234"
+        amount:
+          type: number
+          format: double
+          description: Monto pagado en la transacción
+          example: 150000.00
+        concept:
+          type: string
+          description: Concepto del pago
+          example: "Pago de cuota mensual"
+        paymentDate:
+          type: string
+          format: date
+          description: Fecha del pago
+          example: "2025-11-04"
+        status:
+          type: string
+          enum:
+            - "COMPLETED"
+            - "PENDING"
+            - "REVERSED"
+          description: Estado del pago
+          example: "COMPLETED"
+        reference:
+          type: string
+          description: Referencia del pago
+          example: "REF-2025-11-04-001"
+        processedDate:
+          type: string
+          format: date-time
+          description: Fecha y hora de procesamiento
+          example: "2025-11-04T14:30:00Z"
+    ErrorbillAgreement:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          description: Código de error
+          example: "ERR-002"
+        errorMessage:
+          type: string
+          description: Mensaje descriptivo del error
+          example: "No se encontraron registros de pagos para el convenio"
+        timestamp:
+          type: string
+          format: date-time
+          description: Fecha y hora del error
+          example: "2025-11-04T14:30:00Z"
