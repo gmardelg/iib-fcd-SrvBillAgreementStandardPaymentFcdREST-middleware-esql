@@ -1,5 +1,5 @@
 openapi: 3.0.1
-info:
+info: 
   title: BillAgreementStandardPayment
   description: Servicio diseñado para la notificación o pago de conceptos asociados
     a un convenio. Este servicio estándar para banco Popular permite el recaudo desde
