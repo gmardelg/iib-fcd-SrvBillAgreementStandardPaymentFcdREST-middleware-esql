@@ -5,7 +5,7 @@ info:
     a un convenio. Este servicio estándar para banco Popular permite el recaudo desde
     el canal de oficinas a nivel nacional (Sofia).
   version: 1.0.0
-servers:
+servers: 
 - url: https://agreementsManagement/v1/Payments/Agreement
 paths:
   /Notify:
