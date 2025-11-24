@@ -49,7 +49,7 @@ Reversar notificación del recaudo asociado a un convenio.</con:description><con
     "Amt": 654564,
     "RqUID": "54545"
   }
-}</con:request><con:originalUri>https://10.200.157.5/agreementsManagement/v1/Payments/Bill/Rollback</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/><con:parameterOrder/></con:request><con:request name="Error Validación De Estructura" id="6957a960-71cb-4a82-b233-1b1930d2020d" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://10.213.130.25:55584</con:endpoint><con:request>{
+}</con:request><con:originalUri>https://10.200.157.5:7859/agreementsManagement/v1/Payments/Bill/Rollback</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/><con:parameterOrder/></con:request><con:request name="Error Validación De Estructura" id="6957a960-71cb-4a82-b233-1b1930d2020d" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://10.213.130.25:55584</con:endpoint><con:request>{
   "trace": {
     "X-RqUID": "${=java.lang.System.currentTimeMillis()}",
     "X-Channel": "CANALES",
