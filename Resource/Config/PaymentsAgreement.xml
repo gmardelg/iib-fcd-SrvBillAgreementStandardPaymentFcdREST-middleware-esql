@@ -1,4 +1,4 @@
-<srvConfiguration>
+<srvConfiguration> 
 	<service>
 		<type>DYNAMIC.ROUTE</type>
 		<name>PostbillAgreementPayment</name>
