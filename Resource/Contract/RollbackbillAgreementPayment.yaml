@@ -148,7 +148,7 @@ components:
   schemas:
     ReqbillAgreement:
       required:
-      - race
+      - trace
       - InvoiceInfo
       type: object
       properties:
