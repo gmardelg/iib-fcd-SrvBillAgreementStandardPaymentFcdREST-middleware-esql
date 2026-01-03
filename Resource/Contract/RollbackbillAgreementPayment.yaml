@@ -1,4 +1,4 @@
-openapi: 3.0.1
+openapi: 3.0.0
 info:
   title: BillAgreementStandardPayment
   description: Servicio diseñado para la notificación o pago de conceptos asociados
