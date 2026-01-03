@@ -164,7 +164,9 @@ components:
           - X-BankId
           - X-Reverse
           - X-Language
-          - X-ClientDt          
+          - X-ClientDt
+          - X-BankIdType          
+          - X-BranchId          
           properties:
             X-RqUID:
               maxLength: 30
