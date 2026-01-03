@@ -238,13 +238,7 @@ components:
             X-Reverse:
               type: boolean
               default: True
-              description: "Indicador de Reverso, con un valor booleano constante True"
-            X-BankIdType:
-              maxLength: 15
-              minLength: 0
-              type: string
-              description: Tipo de identificador del banco.
-              example: "01"      
+              description: "Indicador de Reverso, con un valor booleano constante True"    
             X-ClientDt:
               type: string
               format: date-time
