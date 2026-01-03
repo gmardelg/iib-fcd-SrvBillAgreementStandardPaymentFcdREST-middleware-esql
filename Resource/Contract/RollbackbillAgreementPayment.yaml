@@ -155,7 +155,7 @@ components:
         trace:
           type: object
           required:
-          - X-RqUID    
+          - X-RqUIDGG
           - X-Channel
           - X-CompanyId
           - X-GovIssueIdentType
