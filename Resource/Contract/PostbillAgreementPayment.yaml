@@ -162,6 +162,9 @@ components:
           - X-GovIssueIdentType
           - X-IdentSerialNum
           - X-BankId
+          - X-Reverse
+          - X-Language
+          - X-ClientDt          
           properties:
             X-RqUID:
               maxLength: 30
@@ -230,6 +233,19 @@ components:
               format: date-time
               description: Fecha de compensación en formato DateTime. YYYY-MM-DDThh:mm:ss
               example: "2024"      
+            X-Reverse:
+              type: boolean
+              default: True
+              description: "Indicador de Reverso, con un valor booleano constante True"    
+            X-ClientDt:
+              type: string
+              format: date-time
+              description: Fecha y hora del cliente en formato DateTime.
+              example: "2025-01-15T10:30:00"   
+            X-Language:
+              type: string
+              description: Idioma de la solicitud.
+              example: "es"                
         Period:
           type: string
           description: Fecha de la Transacción en formato DateTime
