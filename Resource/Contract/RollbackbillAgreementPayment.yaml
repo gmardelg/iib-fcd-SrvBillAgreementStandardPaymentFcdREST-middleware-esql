@@ -166,7 +166,7 @@ components:
           - X-BranchId
           - X-NextDay
           - X-Reverse
-          - X-Languagee
+          - X-Language
           - X-ClientDt          
           properties:
             X-RqUID:
