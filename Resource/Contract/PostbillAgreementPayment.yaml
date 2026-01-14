@@ -1,554 +1,293 @@
-openapi: 3.0.1
+openapi: 3.0.0
 info:
-  title: BillAgreementStandardPayment
-  description: Servicio diseñado para la notificación o pago de conceptos asociados
-    a un convenio. Este servicio estándar para banco Popular permite el recaudo desde
-    el canal de oficinas a nivel nacional (Sofia).
+  title: Postbill Agreement Payment API
   version: 1.0.0
+  description: API para procesar pagos posteriores a facturación de acuerdos
+
 servers:
-- url: https://agreementsManagement/v1/Payments/Agreement
+  - url: https://api.example.com/v1
+
 paths:
-  /Notify:
+  /postbill:
     post:
+      summary: Procesar pago posterior a facturación
+      description: Procesa un pago después de la facturación de un acuerdo
+      operationId: postbillPayment
       tags:
-      - /Notify
-      summary: Notificación del recaudo asociado a un convenio.
-      description: Notificación o pago de los conceptos asociados a un convenio desde
-        el canal de oficinas a nivel nacional (Sofia)
-      operationId: PostbillAgreementPayment
+        - Payments
       requestBody:
-        content:
-          application/json; charset=utf-8:
-            schema:
-              $ref: '#/components/schemas/ReqbillAgreement'
         required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostbillPaymentRequest'
       responses:
-        "201":
-          description: Transacción Exitosa
-          headers:
-            X-ApprovalId:
-              description: Número de autorización de la transacción
-              schema:
-                type: string
-            X-RqUID:
-              description: Identificador Unico de la transacción
-              schema:
-                type: string
+        200:
+          description: Pago procesado exitosamente
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
-                $ref: '#/components/schemas/RespbillAgreement'
-        "206":
-          description: Se genero un error de negocio
-          headers:
-            X-ApprovalId:
-              description: Número de autorización de la transacción
-              schema:
-                type: string
-            X-RqUID:
-              description: Identificador Unico de la transacción
-              schema:
-                type: string
-          content:
-            application/json; charset=utf-8:
-              schema:
-                $ref: '#/components/schemas/ErrorbillAgreement'
-        "400":
-          description: Petición incorrecta
-          headers:
-            X-ApprovalId:
-              description: Número de autorización de la transacción
-              schema:
-                type: string
-            X-RqUID:
-              description: Identificador Unico de la transacción
-              schema:
-                type: string
-          content:
-            application/json; charset=utf-8:
-              schema:
-                $ref: '#/components/schemas/ErrorbillAgreement'
-        "408":
-          description: Timeout del backend
-          headers:
-            X-ApprovalId:
-              description: Número de autorización de la transacción
-              schema:
-                type: string
-            X-RqUID:
-              description: Identificador Unico de la transacción
-              schema:
-                type: string
-          content:
-            application/json; charset=utf-8:
-              schema:
-                $ref: '#/components/schemas/ErrorbillAgreement'
-        "412":
-          description: RqUID requerido
-          headers:
-            X-ApprovalId:
-              description: Número de autorización de la transacción
-              schema:
-                type: string
-            X-RqUID:
-              description: Identificador Unico de la transacción
-              schema:
-                type: string
-          content:
-            application/json; charset=utf-8:
-              schema:
-                $ref: '#/components/schemas/ErrorbillAgreement'
-        "420":
-          description: Error en el backend
-          headers:
-            X-ApprovalId:
-              description: Número de autorización de la transacción
-              schema:
-                type: string
-            X-RqUID:
-              description: Identificador Unico de la transacción
-              schema:
-                type: string
-          content:
-            application/json; charset=utf-8:
-              schema:
-                $ref: '#/components/schemas/ErrorbillAgreement'
-        "500":
-          description: Error interno en el servidor
-          headers:
-            X-ApprovalId:
-              description: Número de autorización de la transacción
-              schema:
-                type: string
-            X-RqUID:
-              description: Identificador Unico de la transacción
-              schema:
-                type: string
-          content:
-            application/json; charset=utf-8:
-              schema:
-                $ref: '#/components/schemas/ErrorbillAgreement'
-        "508":
-          description: Timeout
-          headers:
-            X-ApprovalId:
-              description: Número de autorización de la transacción
-              schema:
-                type: string
-            X-RqUID:
-              description: Identificador Unico de la transacción
-              schema:
-                type: string
-          content:
-            application/json; charset=utf-8:
-              schema:
-                $ref: '#/components/schemas/ErrorbillAgreement'
-      x-codegen-request-body-name: body
+                $ref: '#/components/schemas/PostbillPaymentResponse'
+        400:
+          description: Solicitud inválida
+        500:
+          description: Error del servidor
+
 components:
   schemas:
-    ReqbillAgreement:
-      required:
-      - trace
-      - InvoiceInfo
-      - PmtReferences
+    trace:
       type: object
+      required:
+        - X-RqUID
+        - X-ClientDt
+        - X-GovIssueIdentType
+        - X-Version
+        - X-BranchName
+        - X-IPAddr
+        - X-KeyAcctId
       properties:
-        trace:
-          type: object
-          required:
-          - X-RqUID    
-          - X-Channel
-          - X-CompanyId
-          - X-GovIssueIdentType
-          - X-IdentSerialNum
-          - X-BankId
-          properties:
-            X-RqUID:
-              maxLength: 30
-              minLength: 1
-              type: string
-              description: Identificador único de la transacción.
-              example: "16012019001"
-            X-Channel:
-              maxLength: 20
-              minLength: 1
-              type: string
-              description: Canal origen de la invocación.
-              example: "CANALES"
-            X-CompanyId:
-              maxLength: 10
-              minLength: 1
-              type: string
-              description: Código de la empresa que origina la invocación.
-              example: "0002"
-            X-GovIssueIdentType:
-              type: string
-              description: Tipo de identificación del operador que consume el servicio.
-              example: "CC"
-            X-IdentSerialNum:
-              maxLength: 20
-              minLength: 1
-              type: string
-              description: Número de identificación del operador que consume el servicio.
-              example: "79845117"
-            X-Version:
-              type: string
-              description: Versión de la aplicación.
-              example: "1.0.0"
-            X-BankIdType:
-              maxLength: 15
-              minLength: 0
-              type: string
-              description: Identificador del banco.
-              example: "002"
-            X-BankId:
-              maxLength: 10
-              minLength: 1
-              type: string
-              description: Código identificador del banco.
-              example: "002"
-            X-BranchId:
-              maxLength: 20
-              minLength: 0
-              type: string
-              description: Identificador de la Oficina /sucursal.
-              example: "040"
-            X-BranchName:
-              type: string
-              description: Nombre de la terminal.
-              example: "W010956GZQ27"
-            X-IPAddr:
-              type: string
-              description: IP origen de la invocación.
-              example: "192.10.20.123"
-            X-KeyAcctId:
-              type: string
-              description: Identificador interno.
-              example: "2"
-            X-NextDay:
-              type: string
-              format: date-time
-              description: Fecha de compensación en formato DateTime. YYYY-MM-DDThh:mm:ss
-              example: "2024"      
-        Period:
+        X-RqUID:
           type: string
-          description: Fecha de la Transacción en formato DateTime
+          minLength: 1
+          maxLength: 30
+          description: Identificador único de la transacción
+          example: "16012019000"
+        X-ClientDt:
+          type: string
           format: date-time
-        InvoiceInfo:
-          $ref: '#/components/schemas/InvoiceInfo'
-        PmtReferences:
-          type: array
-          items:
-            type: object
-            properties:
-              Reference1:
-                type: string
-                maxLength: 65
-                minLength: 0
-                description: Referencia 1 que hace parte de datos adicionales
-              Reference2:
-                type: string
-                maxLength: 65
-                minLength: 0
-                description: Referencia 2 que hace parte de datos adicionales
-              Reference3:
-                type: string
-                maxLength: 65
-                minLength: 0
-                description: Referencia 3 que hace parte de datos adicionales
-              Reference4:
-                type: string
-                maxLength: 65
-                minLength: 0
-                description: Referencia 4 que hace parte de datos adicionales
-              Reference5:
-                type: string
-                maxLength: 65
-                minLength: 0
-                description: Referencia 5 que hace parte de datos adicionales
-            description: Referencia del concepto
-        CustId :
-          type: object
-          description: Información del contribuyente
-          properties:
-            CustIdentType:
-              type: string
-              description: Tipo de identificación del contribuyente
-              maxLength: 255
-              minLength: 0
-            CustIdentNum :
-              type: string
-              description: Número de identificación del contribuyente
-              maxLength: 255
-              minLength: 0
-        PersonInfo :
-          type: object
-          description: Información del contribuyente o cliente que realiza el pago  
-          properties:
-            CustId :
-              type: object
-              properties:
-                CustIdentType:
-                  type: string
-                  description: Tipo de identificación del cliente o contribuyente
-                  maxLength: 255
-                  minLength: 0
-                CustIdentNum :
-                  type: string
-                  description: Número de identificación del cliente o contribuyente
-                  maxLength: 255
-                  minLength: 0
-            CustName:
-              type: object
-              properties:
-                FirstName:
-                  type: string
-                  description: Primer nombre del cliente o contribuyente
-                  maxLength: 255
-                  minLength: 0
-                MiddleName:
-                  type: string
-                  description: Segundo nombre del cliente o contribuyente
-                  maxLength: 255
-                  minLength: 0
-                LastName:
-                  type: string
-                  description: Primer apellido del cliente o contribuyente
-                  maxLength: 255
-                  minLength: 0
-                SecondLastName:
-                  type: string
-                  description: Segundo Apellido del cliente o contribuyente
-                  maxLength: 255
-                  minLength: 0
-            Addr1:
-              type: string
-              description: Dirección del cliente o contribuyente 
-              maxLength: 255
-              minLength: 0
-            Desc:
-              type: string
-              description: Origen de los fondos
-              maxLength: 255
-              minLength: 0
-        AdditionalData:
-          type: object
-          description: Información de quien ordena pagar el impuesto 
-          properties:
-            CustId:
-              type: object
-              properties:
-                CustIdentType:
-                  type: string
-                  description: Tipo de identificación de quien ordena el pago
-                  maxLength: 255
-                  minLength: 0
-                CustIdentNum :
-                  type: string
-                  description: Número de identificación de quien ordena el pago
-                  maxLength: 255
-                  minLength: 0
-            CustName:
-              type: object
-              properties:
-                Names:
-                  type: string
-                  description: Nombres de quien ordena el pago
-                  maxLength: 255
-                  minLength: 0
-                Surnames:
-                  type: string
-                  description: Apellidos de quien ordena el pago
-                  maxLength: 255
-                  minLength: 0
-            Addr1:
-              type: string
-              description: Dirección de quien ordena el pago 
-              maxLength: 255
-              minLength: 0
-    ErrorStatus:
-      required:
-      - Status
-      type: object
-      properties:
-        Status:
-          required:
-          - AdditionalStatus
-          - EndDt
-          - Severity
-          - StatusCode
-          - StatusDesc
-          type: object
-          properties:
-            StatusCode:
-              type: string
-              description: Código de respuesta del API
-              enum:
-              - "0"
-              - "100"
-            Severity:
-              type: string
-              description: Código de severidad de la respuesta
-              example: Error
-              enum:
-              - Info
-              - Error
-            StatusDesc:
-              maxLength: 300
-              minLength: 1
-              type: string
-              description: Descripción del estado de la consulta
-            AdditionalStatus:
-              required:
-              - ServerStatusCode
-              - StatusDesc
-              type: object
-              properties:
-                ServerStatusCode:
-                  type: string
-                  description: Código de respuesta del servidor
-                Severity:
-                  type: string
-                  description: Código de severidad de la respuesta
-                  example: Error
-                StatusDesc:
-                  maxLength: 300
-                  minLength: 1
-                  type: string
-                  description: Descripción detallada del estado de la consulta
-              description: Información adicional de la respuesta
-            EndDt:
-              type: string
-              description: Fecha y hora de finalización en formato DataTime
-              format: date-time
-    InvoiceInfo:
-      required:
-      - AgrmId
-      - SvcId
-      - Amt
-      - CodeIAC
-      - ExpDt
-      - InvoiceNum
-      type: object
-      properties:
-        AgrmId:
+          description: Fecha y hora del cliente en formato DateTime
+          example: "2025-01-15T10:30:00Z"
+        X-GovIssueIdentType:
+          type: string
+          minLength: 1
+          maxLength: 10
+          description: Tipo de identificación gubernamental
+          example: "CC"
+        X-Version:
+          type: string
+          minLength: 1
+          maxLength: 10
+          description: Versión de la aplicación cliente
+          example: "1.0.0"
+        X-BranchName:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: Nombre de la terminal o sucursal origen
+          example: "W010956GZQ27"
+        X-IPAddr:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: Dirección IP origen de la transacción
+          example: "192.10.20.123"
+        X-KeyAcctId:
+          type: string
+          minLength: 1
           maxLength: 20
-          minLength: 1
-          type: string
-          description: "Identificador del convenio"
-          example: "98412"
-        SvcId:
-          maxLength: 4
-          minLength: 1
-          type: string
-          description: "Codigo del producto"
-          example: "RB00"          
-        InvoiceNum:
-          maxLength: 35
-          minLength: 1
-          type: string
-          description: "Número de factura, obligatorio para el negocio"
-          example: "234658"
+          description: Identificador de cuenta clave interno
+          example: "2"
+
+    InvoiceInfo:
+      type: object
+      required:
+        - Amt
+        - AgrmId
+        - SvcId
+      properties:
         Amt:
           type: number
-          description: Valor total del concepto a pagar
-          format: float
-          maxLength: 20
           minLength: 1
+          maxLength: 20
+          description: Valor total del concepto a pagar
+          format: double
           example: 5000.0
-        CodeIAC:
+        AgrmId:
           type: string
-          description: Código IAC del convenio
-          example: "234658"
-        ExpDt:
+          minLength: 1
+          maxLength: 20
+          description: Identificador del acuerdo de facturación
+          example: "AGRM001"
+        SvcId:
           type: string
-          description: "Fecha de expiración de la factura, en formato Date"
+          minLength: 1
+          maxLength: 4
+          description: Identificador del servicio
+          example: "SVC1"
+        InvoiceDate:
+          type: string
           format: date
-          example: 2024-09-24
-        PmtType:
+          description: Fecha de emisión de la factura
+          example: "2025-01-10"
+        InvoiceNumber:
           type: string
-          description: 'Tipo de pago (CH) Cheque o (EF) Efectivo '
-          example: EF
-        ChType:
-          type: string
-          description: Entidad del Cheque
-          example: BPOP
-          enum:
-          - BPOP
-          - OTHER
-    MsgRsHdr:
+          minLength: 1
+          maxLength: 50
+          description: Número de factura
+          example: "INV20250110001"
+
+    CustId:
+      type: object
       required:
-      - Status
+        - CustIdentType
+        - CustIdentNum
+      properties:
+        CustIdentType:
+          type: string
+          minLength: 1
+          maxLength: 2
+          description: Tipo de identificación del cliente
+          example: "CC"
+        CustIdentNum:
+          type: string
+          minLength: 1
+          maxLength: 20
+          description: Número de identificación del cliente
+          example: "12345678"
+
+    PersonInfo:
+      type: object
+      required:
+        - FirstName
+        - LastName
+      properties:
+        FirstName:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: Primer nombre de la persona
+          example: "Juan"
+        LastName:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: Apellido de la persona
+          example: "Pérez"
+        MiddleName:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: Segundo nombre de la persona (opcional)
+          example: "Carlos"
+        Email:
+          type: string
+          minLength: 5
+          maxLength: 100
+          description: Correo electrónico de la persona
+          example: "juan.perez@example.com"
+
+    PmtReferences:
       type: object
       properties:
+        Reference1:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: Primera referencia de pago
+          example: "REF001"
+        Reference2:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: Segunda referencia de pago
+          example: "REF002"
+        Reference3:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: Tercera referencia de pago
+          example: "REF003"
+        Reference4:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: Cuarta referencia de pago
+          example: "REF004"
+        Reference5:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: Quinta referencia de pago
+          example: "REF005"
+
+    PostbillPaymentRequest:
+      type: object
+      required:
+        - trace
+        - InvoiceInfo
+        - CustId
+        - PersonInfo
+      properties:
+        trace:
+          $ref: '#/components/schemas/trace'
+        InvoiceInfo:
+          $ref: '#/components/schemas/InvoiceInfo'
+        CustId:
+          $ref: '#/components/schemas/CustId'
+        PersonInfo:
+          $ref: '#/components/schemas/PersonInfo'
+        PmtReferences:
+          $ref: '#/components/schemas/PmtReferences'
+        PaymentMethod:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: Método de pago utilizado
+          example: "CREDIT_CARD"
+        AuthorizationCode:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: Código de autorización del pago
+          example: "AUTH20250115001"
+
+    PostbillPaymentResponse:
+      type: object
+      required:
+        - TransactionId
+        - Status
+        - Message
+      properties:
+        TransactionId:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: ID de la transacción de pago
+          example: "TXN20250115001"
         Status:
-          required:
-          - AdditionalStatus
-          - EndDt
-          - Severity
-          - StatusCode
-          - StatusDesc
-          type: object
-          properties:
-            StatusCode:
-              type: string
-              description: Codigo de respuesta del API
-              example: "0"
-              enum:
-              - "0"
-              - "100"
-            Severity:
-              type: string
-              description: Codigo de severidad de la respuesta
-              example: Info
-              enum:
-              - Info
-              - Error
-            StatusDesc:
-              maxLength: 300
-              minLength: 1
-              type: string
-              description: Descripción del estado de la notificación
-              example: Transacción Exitosa
-            AdditionalStatus:
-              required:
-              - ServerStatusCode
-              - StatusDesc
-              type: object
-              properties:
-                ServerStatusCode:
-                  type: string
-                  description: Código de respuesta del servidor
-                  example: "0"
-                Severity:
-                  type: string
-                  description: Codigo de severidad de la respuesta
-                  example: Info
-                  enum:
-                  - Info
-                  - Error
-                StatusDesc:
-                  maxLength: 300
-                  minLength: 1
-                  type: string
-                  description: Descripción detallada del estado de la notificación
-                  example: Notificación Exitosa
-              description: Información adicional de la respuesta
-            EndDt:
-              type: string
-              description: Fecha y hora de finalización en formato DataTime
-              format: date-time
-    RespbillAgreement:
-      required:
-      - MsgRsHdr
-      type: object
-      properties:
-        MsgRsHdr:
-          $ref: '#/components/schemas/MsgRsHdr'
-    ErrorbillAgreement:
-      required:
-      - MsgRsHdr
-      type: object
-      properties:
-        MsgRsHdr:
-          $ref: '#/components/schemas/ErrorStatus'
+          type: string
+          minLength: 1
+          maxLength: 20
+          description: Estado de la transacción
+          example: "SUCCESS"
+        Message:
+          type: string
+          minLength: 1
+          maxLength: 500
+          description: Mensaje descriptivo del resultado
+          example: "Pago procesado exitosamente"
+        PaymentAmount:
+          type: number
+          minLength: 1
+          maxLength: 20
+          description: Monto pagado
+          format: double
+          example: 5000.0
+        ConfirmationNumber:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: Número de confirmación del pago
+          example: "CONF20250115001"
+        ProcessedDateTime:
+          type: string
+          format: date-time
+          description: Fecha y hora de procesamiento
+          example: "2025-01-15T10:35:00Z"
+        BalanceDue:
+          type: number
+          minLength: 1
+          maxLength: 20
+          description: Saldo pendiente después del pago
+          format: double
+          example: 0.0
