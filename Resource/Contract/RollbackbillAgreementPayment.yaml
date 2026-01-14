@@ -1,409 +1,221 @@
-openapi: 3.0.1
+openapi: 3.0.0
 info:
-  title: BillAgreementStandardPayment
-  description: Servicio diseñado para la notificación o pago de conceptos asociados
-    a un convenio. El método  POST /Rollback permite reversar o debitar la notificación
-    de un recaudo desde el canal de oficinas (Sofia).
+  title: Rollback Bill Agreement Payment API
   version: 1.0.0
+  description: API para procesar reversos de pagos de acuerdos de facturación
+
 servers:
-- url: https://agreementsManagement/v1/Payments/Bill
+  - url: https://api.example.com/v1
+
 paths:
-  /Rollback:
+  /rollback:
     post:
+      summary: Procesar reverso de pago
+      description: Revierte una transacción de pago de acuerdo de facturación
+      operationId: rollbackPayment
       tags:
-      - /Rollback
-      summary: Reversar notificación del recaudo asociado a un convenio.
-      description: Reversar la notificación o pago de los conceptos asociados a un
-        convenio desde el canal de oficinas a nivel nacional (Sofia)
-      operationId: RollbackbillAgreementPayment
+        - Payments
       requestBody:
-        content:
-          application/json; charset=utf-8:
-            schema:
-              $ref: '#/components/schemas/ReqbillAgreement'
         required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RollbackPaymentRequest'
       responses:
-        "201":
-          description: Transacción Exitosa
-          headers:
-            X-ApprovalId:
-              description: Número de autorización de la transacción
-              schema:
-                type: string
-            X-RqUID:
-              description: Identificador Unico de la transacción
-              schema:
-                type: string
+        200:
+          description: Reverso procesado exitosamente
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
-                $ref: '#/components/schemas/RespbillAgreement'
-        "206":
-          description: Se genero un error de negocio
-          headers:
-            X-ApprovalId:
-              description: Número de autorización de la transacción
-              schema:
-                type: string
-            X-RqUID:
-              description: Identificador Unico de la transacción
-              schema:
-                type: string
-          content:
-            application/json; charset=utf-8:
-              schema:
-                $ref: '#/components/schemas/ErrorbillAgreement'
-        "400":
-          description: Petición incorrecta
-          headers:
-            X-ApprovalId:
-              description: Número de autorización de la transacción
-              schema:
-                type: string
-            X-RqUID:
-              description: Identificador Unico de la transacción
-              schema:
-                type: string
-          content:
-            application/json; charset=utf-8:
-              schema:
-                $ref: '#/components/schemas/ErrorbillAgreement'
-        "408":
-          description: Timeout del backend
-          headers:
-            X-ApprovalId:
-              description: Número de autorización de la transacción
-              schema:
-                type: string
-            X-RqUID:
-              description: Identificador Unico de la transacción
-              schema:
-                type: string
-          content:
-            application/json; charset=utf-8:
-              schema:
-                $ref: '#/components/schemas/ErrorbillAgreement'
-        "412":
-          description: RqUI requerido
-          headers:
-            X-ApprovalId:
-              description: Número de autorización de la transacción
-              schema:
-                type: string
-            X-RqUID:
-              description: Identificador Unico de la transacción
-              schema:
-                type: string
-          content:
-            application/json; charset=utf-8:
-              schema:
-                $ref: '#/components/schemas/ErrorbillAgreement'
-        "420":
-          description: Error en el backend
-          headers:
-            X-ApprovalId:
-              description: Número de autorización de la transacción
-              schema:
-                type: string
-            X-RqUID:
-              description: Identificador Unico de la transacción
-              schema:
-                type: string
-          content:
-            application/json; charset=utf-8:
-              schema:
-                $ref: '#/components/schemas/ErrorbillAgreement'
-        "500":
-          description: Error interno en el servidor
-          headers:
-            X-ApprovalId:
-              description: Número de autorización de la transacción
-              schema:
-                type: string
-            X-RqUID:
-              description: Identificador Unico de la transacción
-              schema:
-                type: string
-          content:
-            application/json; charset=utf-8:
-              schema:
-                $ref: '#/components/schemas/ErrorbillAgreement'
-        "508":
-          description: Timeout
-          headers:
-            X-ApprovalId:
-              description: Número de autorización de la transacción
-              schema:
-                type: string
-            X-RqUID:
-              description: Identificador Unico de la transacción
-              schema:
-                type: string
-          content:
-            application/json; charset=utf-8:
-              schema:
-                $ref: '#/components/schemas/ErrorbillAgreement'
-      x-codegen-request-body-name: body
+                $ref: '#/components/schemas/RollbackPaymentResponse'
+        400:
+          description: Solicitud inválida
+        500:
+          description: Error del servidor
+
 components:
   schemas:
-    ReqbillAgreement:
-      required:
-      - race
-      - InvoiceInfo
+    trace:
       type: object
+      required:
+        - X-RqUID
+        - X-ClientDt
+        - X-GovIssueIdentType
+        - X-Version
+        - X-BranchName
+        - X-IPAddr
+        - X-KeyAcctId
       properties:
-        trace:
-          type: object
-          required:
-          - X-RqUID    
-          - X-Channel
-          - X-CompanyId
-          - X-GovIssueIdentType
-          - X-IdentSerialNum
-          - X-BankId
-          properties:
-            X-RqUID:
-              maxLength: 30
-              minLength: 1
-              type: string
-              description: Identificador único de la transacción.
-              example: "16012019000"
-            X-Channel:
-              maxLength: 20
-              minLength: 1
-              type: string
-              description: Canal origen de la invocación.
-              example: "CANALES"
-            X-CompanyId:
-              maxLength: 10
-              minLength: 1
-              type: string
-              description: Código de la empresa que origina la invocación.
-              example: "0002"
-            X-GovIssueIdentType:
-              type: string
-              description: Tipo de identificación del operador que consume el servicio.
-              example: "CC"
-            X-IdentSerialNum:
-              maxLength: 20
-              minLength: 1
-              type: string
-              description: Número de identificación del operador que consume el servicio.
-              example: "79845117"
-            X-Version:
-              type: string
-              description: Versión de la aplicación.
-              example: "1.0.0"
-            X-BankIdType:
-              maxLength: 15
-              minLength: 0
-              type: string
-              description: Identificador del banco.
-              example: "002"
-            X-BankId:
-              maxLength: 10
-              minLength: 1
-              type: string
-              description: Código identificador del banco.
-              example: "002"
-            X-BranchId:
-              maxLength: 20
-              minLength: 0
-              type: string
-              description: Identificador de la Oficina /sucursal.
-              example: "040"
-            X-BranchName:
-              type: string
-              description: Nombre de la terminal.
-              example: "W010956GZQ27"
-            X-IPAddr:
-              type: string
-              description: IP origen de la invocación.
-              example: "192.10.20.123"
-            X-KeyAcctId:
-              type: string
-              description: Identificador interno.
-              example: "2"
-            X-NextDay:
-              type: string
-              format: date-time
-              description: Fecha de compensación en formato DateTime. YYYY-MM-DDThh:mm:ss
-              example: "2025-07-25"    
-            X-Reverse:
-              type: boolean
-              default: True
-              description: "Indicador de Reverso, con un valor booleano constante True"
-        Period:
+        X-RqUID:
           type: string
-          description: Fecha de la Transacción en formato DateTime
-          format: date-time
-        InvoiceInfo:
-          $ref: '#/components/schemas/InvoiceInfo'
-      description: Reversar notificación de los conceptos asociados a un convenio
-    ErrorStatus:
-      required:
-      - Status
-      type: object
-      properties:
-        Status:
-          required:
-          - AdditionalStatus
-          - EndDt
-          - Severity
-          - StatusCode
-          - StatusDesc
-          type: object
-          properties:
-            StatusCode:
-              type: string
-              description: Código de respuesta del API
-              enum:
-              - "0"
-              - "100"
-            Severity:
-              type: string
-              description: Código de severidad de la respuesta
-              example: Error
-              enum:
-              - Info
-              - Error
-            StatusDesc:
-              maxLength: 300
-              minLength: 1
-              type: string
-              description: Descripción del estado de la consulta
-            AdditionalStatus:
-              required:
-              - ServerStatusCode
-              - StatusDesc
-              type: object
-              properties:
-                ServerStatusCode:
-                  type: string
-                  description: Código de respuesta del servidor
-                Severity:
-                  type: string
-                  description: Código de severidad de la respuesta
-                  example: Error
-                StatusDesc:
-                  maxLength: 300
-                  minLength: 1
-                  type: string
-                  description: Descripción detallada del estado de la consulta
-              description: Información adicional de la respuesta
-            EndDt:
-              type: string
-              description: Fecha y hora de finalización en formato DataTime
-              format: date-time
-    InvoiceInfo:
-      required:
-      - Amt
-      - CodeIAC
-      - InvoiceNum
-      - RqUID
-      type: object
-      properties:
-        CodeIAC:
-          type: string
-          description: Código IAC del convenio
-          example: "234658"
-        InvoiceNum:
-          maxLength: 35
           minLength: 1
+          maxLength: 30
+          description: Identificador único de la transacción
+          example: "16012019000"
+        X-ClientDt:
           type: string
-          description: "Número de factura, obligatorio para el negocio"
-          example: "234658"
+          format: date-time
+          description: Fecha y hora del cliente en formato DateTime
+          example: "2025-01-15T10:30:00Z"
+        X-GovIssueIdentType:
+          type: string
+          minLength: 1
+          maxLength: 10
+          description: Tipo de identificación gubernamental
+          example: "CC"
+        X-Version:
+          type: string
+          minLength: 1
+          maxLength: 10
+          description: Versión de la aplicación cliente
+          example: "1.0.0"
+        X-BranchName:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: Nombre de la terminal o sucursal origen
+          example: "W010956GZQ27"
+        X-IPAddr:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: Dirección IP origen de la transacción
+          example: "192.10.20.123"
+        X-KeyAcctId:
+          type: string
+          minLength: 1
+          maxLength: 20
+          description: Identificador de cuenta clave interno
+          example: "2"
+
+    InvoiceInfo:
+      type: object
+      required:
+        - Amt
+        - AgrmId
+        - SvcId
+      properties:
         Amt:
           type: number
-          description: "Valor total por pagar"
-          format: float
+          minLength: 1
           maxLength: 20
-          minLength: 1
+          description: Valor total por pagar
+          format: double
           example: 5000.0
-        RqUID:
-          maxLength: 30
+        AgrmId:
+          type: string
           minLength: 1
+          maxLength: 20
+          description: Identificador del acuerdo de facturación
+          example: "AGRM001"
+        SvcId:
           type: string
-          description: Identificador Único de la notificación o pago a reversar
-          example: "16012019001"
-        ExpDt:
-          type: string
-          description: "Fecha de expiración de la factura, en formato Date"
-          format: date
-          example: 2024-09-24
-    MsgRsHdr:
-      required:
-      - Status
+          minLength: 1
+          maxLength: 4
+          description: Identificador del servicio
+          example: "SVC1"
+
+    CustId:
       type: object
+      required:
+        - CustIdentType
+        - CustIdentNum
       properties:
+        CustIdentType:
+          type: string
+          minLength: 1
+          maxLength: 2
+          description: Tipo de identificación del cliente
+          example: "CC"
+        CustIdentNum:
+          type: string
+          minLength: 1
+          maxLength: 20
+          description: Número de identificación del cliente
+          example: "12345678"
+
+    PersonInfo:
+      type: object
+      required:
+        - FirstName
+        - LastName
+      properties:
+        FirstName:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: Primer nombre de la persona
+          example: "Juan"
+        LastName:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: Apellido de la persona
+          example: "Pérez"
+        MiddleName:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: Segundo nombre de la persona (opcional)
+          example: "Carlos"
+
+    RollbackPaymentRequest:
+      type: object
+      required:
+        - trace
+        - InvoiceInfo
+        - CustId
+        - PersonInfo
+      properties:
+        trace:
+          $ref: '#/components/schemas/trace'
+        InvoiceInfo:
+          $ref: '#/components/schemas/InvoiceInfo'
+        CustId:
+          $ref: '#/components/schemas/CustId'
+        PersonInfo:
+          $ref: '#/components/schemas/PersonInfo'
+        Reason:
+          type: string
+          minLength: 1
+          maxLength: 500
+          description: Razón del reverso
+          example: "Cliente solicitó cancelación"
+
+    RollbackPaymentResponse:
+      type: object
+      required:
+        - TransactionId
+        - Status
+        - Message
+      properties:
+        TransactionId:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: ID de la transacción de reverso
+          example: "TXN20250115001"
         Status:
-          required:
-          - AdditionalStatus
-          - EndDt
-          - Severity
-          - StatusCode
-          - StatusDesc
-          type: object
-          properties:
-            StatusCode:
-              type: string
-              description: Codigo de respuesta del API
-              example: "0"
-              enum:
-              - "0"
-              - "100"
-            Severity:
-              type: string
-              description: Codigo de severidad de la respuesta
-              example: Info
-              enum:
-              - Info
-              - Error
-            StatusDesc:
-              maxLength: 300
-              minLength: 1
-              type: string
-              description: Descripción del estado de la notificación
-              example: Transacción Exitosa
-            AdditionalStatus:
-              required:
-              - ServerStatusCode
-              - StatusDesc
-              type: object
-              properties:
-                ServerStatusCode:
-                  type: string
-                  description: Código de respuesta del servidor
-                  example: "0"
-                Severity:
-                  type: string
-                  description: Codigo de severidad de la respuesta
-                  example: Info
-                  enum:
-                  - Info
-                  - Error
-                StatusDesc:
-                  maxLength: 300
-                  minLength: 1
-                  type: string
-                  description: Descripción detallada del estado de la notificación
-                  example: Se ha reversado el recaudo
-              description: Información adicional de la respuesta
-            EndDt:
-              type: string
-              description: Fecha y hora de finalización en formato DataTime
-              format: date-time
-    RespbillAgreement:
-      required:
-      - MsgRsHdr
-      type: object
-      properties:
-        MsgRsHdr:
-          $ref: '#/components/schemas/MsgRsHdr'
-    ErrorbillAgreement:
-      required:
-      - MsgRsHdr
-      type: object
-      properties:
-        MsgRsHdr:
-          $ref: '#/components/schemas/ErrorStatus'
+          type: string
+          minLength: 1
+          maxLength: 20
+          description: Estado de la transacción
+          example: "SUCCESS"
+        Message:
+          type: string
+          minLength: 1
+          maxLength: 500
+          description: Mensaje descriptivo del resultado
+          example: "Reverso procesado exitosamente"
+        RollbackAmount:
+          type: number
+          minLength: 1
+          maxLength: 20
+          description: Monto revertido
+          format: double
+          example: 5000.0
+        ProcessedDateTime:
+          type: string
+          format: date-time
+          description: Fecha y hora de procesamiento
+          example: "2025-01-15T10:35:00Z"
