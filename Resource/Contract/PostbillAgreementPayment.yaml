@@ -363,9 +363,13 @@ components:
           type: string
           description: Código del banco destino.
           example: "2"
+          minLength: 1
+          maxLength: 99999999
         Name:
           type: string
           description: Nombre del banco destino.
+          minLength: 0
+          maxLength: 99999999
         BranchId:
           type: string
           description: Código de la oficina del banco origen.
