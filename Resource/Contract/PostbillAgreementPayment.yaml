@@ -336,9 +336,13 @@ components:
         ContactName:
           type: string
           description: Nombre del contacto
+          minLength: 0
+          maxLength: 999
         NickName:
           type: string
           description: Alias del contacto
+          minLength: 0
+          maxLength: 999
         GovIssueIdent:
           $ref: '#/components/schemas/GovIssueIdent'
         DepAcctIdTo:
@@ -381,3 +385,6 @@ components:
           - FD          
         IdentSerialNum:
           type: string
+          description: Número de indetificación :)
+          minLength: 0
+          maxLength: 999
