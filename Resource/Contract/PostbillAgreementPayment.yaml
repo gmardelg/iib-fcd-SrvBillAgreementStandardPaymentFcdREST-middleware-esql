@@ -257,6 +257,8 @@ components:
           - Info
           - Warning
           - Error
+          minLength: 0
+          maxLength: 999999
         StatusDesc:
           maxLength: 100
           minLength: 0
@@ -288,6 +290,8 @@ components:
           - Info
           - Warning
           - Error
+          minLength: 0
+          maxLength: 9999
         StatusDesc:
           maxLength: 100
           minLength: 0
@@ -316,6 +320,8 @@ components:
           - AHO
           - COR
           - DPE
+          minLength: 0
+          maxLength: 9999
         BankInfo:
           $ref: '#/components/schemas/BankInfo'
     DepAcctIdTo:
@@ -327,7 +333,7 @@ components:
       type: object
       properties:
         ContactId:
-          minimun: 0
+          minimum: 0
           maximum: 99999999
           type: integer
           description: Identificador del contacto dentro de la agenda
@@ -365,6 +371,8 @@ components:
         BranchId:
           type: string
           description: Código de la oficina del banco origen.
+          minLength: 0
+          maxLength: 9999
       required:
       - BankId
     GovIssueIdent:
@@ -384,7 +392,9 @@ components:
           - PAS
           - RC
           - TI
-          - FD          
+          - FD
+          minLength: 0
+          maxLength: 999
         IdentSerialNum:
           type: string
           description: Número de indetificación :)
