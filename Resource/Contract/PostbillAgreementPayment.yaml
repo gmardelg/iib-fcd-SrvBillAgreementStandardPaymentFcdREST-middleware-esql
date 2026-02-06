@@ -320,8 +320,6 @@ components:
           - AHO
           - COR
           - DPE
-          minLength: 0
-          maxLength: 9999
         BankInfo:
           $ref: '#/components/schemas/BankInfo'
     DepAcctIdTo:
@@ -393,8 +391,6 @@ components:
           - RC
           - TI
           - FD
-          minLength: 0
-          maxLength: 999
         IdentSerialNum:
           type: string
           description: Número de indetificación :)
