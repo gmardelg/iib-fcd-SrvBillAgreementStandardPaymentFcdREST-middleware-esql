@@ -80,7 +80,6 @@ CREATE COMPUTE MODULE FacadeProcessMsgReqREST
 			SET Environment.Variables.usr.errorStructure = TRUE;
 			THROW USER EXCEPTION CATALOG 'FCD' MESSAGE 400 VALUES ('Error en la transacción', 'Petición Incorrecta');
 		END IF;
-        SET OutputRoot.MQMD.expiry = UDP_MQEXPIRY
 		RETURN FALSE;
 	END;
 
