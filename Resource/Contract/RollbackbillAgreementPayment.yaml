@@ -347,7 +347,7 @@ components:
           description: "Fecha de expiración de la factura, en formato Date"
           format: date
           example: 2024-09-24
-    MsgRsHdr1:
+    MsgRsHdr:
       required:
       - Status
       type: object
@@ -411,15 +411,15 @@ components:
               format: date-time
     RespbillAgreement:
       required:
-      - MsgRsHdr1
+      - MsgRsHdr
       type: object
       properties:
-        MsgRsHdr1:
-          $ref: '#/components/schemas/MsgRsHdr1'
+        MsgRsHdr:
+          $ref: '#/components/schemas/MsgRsHdr'
     ErrorbillAgreement:
       required:
-      - MsgRsHdr1
+      - MsgRsHdr
       type: object
       properties:
-        MsgRsHdr1:
+        MsgRsHdr:
           $ref: '#/components/schemas/ErrorStatus'
