@@ -1,27 +1,27 @@
 openapi: 3.0.0
 info:
-  title: SrvCreateContactAccountAST
-  description: Esta API permite la creación de un contacto en la agenda de AST para transferencias.
+  title: SrvAccountActivityInquiryByIVR
+  description: Esta API permite realizar la consulta de movimientos de una cuenta desde IVR
   contact:
     email: notificacionESB@bancopopular.com.co
   version: 1.0.0
 servers:
-- url: /customerManagement/v1/Affiliation
+- url: https://10.200.157.5:7859/accountsManagement/v1/Inquiries
 paths:
-  /CreateContact:
+  /AccountTransactionsByIVR:
     post:
       tags:
-      - CreateContact
-      summary: Crea un contacto en la agenda de AST para transferencias
-      description: Crea un contacto en la agenda de AST para transferencias
-      operationId: postCreateContactAccount
+      - AccountTransactionsByIVR
+      summary: Realiza la consulta de movimientos de una cuenta desde IVR
+      description: Realiza la consulta de movimientos de una cuenta desde IVR
+      operationId: postAccountTransactionsByIVR
       parameters:
       - name: X-RqUID
         in: header
         description: Identificador unico del mensaje
         required: true
         schema:
-          maxLength: 36
+          maxLength: 32
           minLength: 1
           type: string
         example: "201901160925"
@@ -33,10 +33,7 @@ paths:
           maxLength: 20
           minLength: 0
           type: string
-          enum:
-          - BM
-          - PB          
-        example: BM
+        example: MB
       - name: X-CompanyId
         in: header
         description: Codigo de empresa que realiza la invocacion
@@ -44,41 +41,131 @@ paths:
         schema:
           maximum: 10
           minimum: 0
-          type: integer
-          format: int32
-        example: "0002"
+          type: string
+        example: "0052"
+      - name: X-GovIssueIdentType
+        in: header
+        description: Tipo de identificación emitida por el gobierno del pais
+        required: false
+        schema:
+          maxLength: 20
+          minLength: 0
+          type: string
+        example: "1"
+      - name: X-IdentSerialNum
+        in: header
+        description: Numero de identificacion
+        required: true
+        schema:
+          maxLength: 20
+          minLength: 0
+          type: string
+        example: "1000999888"
       - name: X-IPAddr
         in: header
         description: Ip de dispositivo
-        required: false
+        required: true
         schema:
           maxLength: 15
           minLength: 0
           type: string
           format: ipv4
         example: 179.1.89.18
+      - name: X-SessKey
+        in: header
+        description: Código de sesión
+        required: false
+        schema:
+          maxLength: 99
+          minLength: 0
+          type: string
+        example: "65tf76t7f7td7fdo5dtyg877hijyio89"
+      - name: X-Version
+        in: header
+        description: Version del servicio
+        required: false
+        schema:
+          maxLength: 20
+          minLength: 0
+          type: string
+        example: "1.0"
+      - name: X-KeyAcctId
+        in: header
+        required: true
+        schema:
+          type: string
+          maxLength: 15
+          minLength: 1
+        description: Llave de identificación de cuenta
+        example: "2"              
+      - name: X-BankId
+        in: header
+        required: true
+        schema:
+          type: string
+          maxLength: 99
+          minLength: 1
+        description: Identificador del banco
+        example: "0002"
+      - name: X-BankIdType
+        in: header
+        required: true
+        schema:
+          type: string
+          maxLength: 1
+          minLength: 1
+        description: Jornada de la Transaccion
+        example: "1"
+      - name: X-BranchId
+        in: header
+        required: true
+        schema:
+          type: string
+          maxLength: 10
+          minLength: 1
+        description: Identificador de la oficina
+        example: "001"
+      - name: X-ClientDt
+        in: header
+        description: Fecha de transacción - AAAA-MM-DDThh:mm:ss
+        required: true
+        schema:
+          type: string
+          format: date-time
+          maxLength: 99
+          minLength: 1
+        example: 2024-08-09T20:00:00
+      - name: X-NextDay
+        in: header
+        description: Fecha de transacción - AAAA-MM-DDThh:mm:ss
+        required: true
+        schema:
+          type: string
+          format: date-time
+          maxLength: 99
+          minLength: 1
+        example: 2024-08-09T20:00:00
+      - name: X-Reverse
+        in: header
+        description: Indicador de Reverso
+        required: true
+        schema:
+          type: boolean
+        example: false
       - name: X-Language
         in: header
-        description: "especifica lenguaje usado, sigue el estandar ISO 639 mas un\
-          \ guion mas el codigo de pais segun la norma ISO 3166"
+        description: Especifica lenguaje usado, sigue el estandar ISO 639 mas un guion mas el codigo de pais segun la norma ISO 3166
+        required: true
         schema:
           maxLength: 5
           minLength: 5
           type: string
-        example: es-CO
-      - name: X-ClientDt
-        in: header
-        description: Fecha de transacción - AAAA-MM-DDThh:mm:ss
-        required: false
-        schema:
-          type: string
-          format: date-time
-        example: 2024-08-09T20:00:00
+        example: es_CO
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateContactAccountRequest'
+              $ref: '#/components/schemas/AccountTransactionsByIVR'
         required: true
       responses:
         "201":
@@ -95,7 +182,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateContactAccountResponse'
+                $ref: '#/components/schemas/AccountTransactionsByIVRResponseSuccess'
         "206":
           description: Error en la transaccion
           headers:
@@ -110,7 +197,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateContactAccountResponseBusinessError'
+                $ref: '#/components/schemas/AccountTransactionsByIVRResponse'
         "400":
           description: Peticion incorrecta
           headers:
@@ -125,7 +212,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateContactAccountResponseError'
+                $ref: '#/components/schemas/AccountTransactionsByIVRResponse'
         "500":
           description: Ha ocurrido un error en la invocacion
           headers:
@@ -140,7 +227,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateContactAccountResponseError'
+                $ref: '#/components/schemas/AccountTransactionsByIVRResponse'
         "504":
           description: Timeout
           headers:
@@ -155,7 +242,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateContactAccountResponseError'
+                $ref: '#/components/schemas/AccountTransactionsByIVRResponse'
         "412":
           description: RqUID es requerido
           headers:
@@ -170,7 +257,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateContactAccountResponseError'
+                $ref: '#/components/schemas/AccountTransactionsByIVRResponse'
         "408":
           description: Timeout del backend
           headers:
@@ -185,7 +272,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateContactAccountResponseError'
+                $ref: '#/components/schemas/AccountTransactionsByIVRResponse'
         "420":
           description: Error en el backend
           headers:
@@ -200,33 +287,78 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateContactAccountResponseError'
+                $ref: '#/components/schemas/AccountTransactionsByIVRResponse'
 components:
   schemas:
-    CreateContactAccountRequest:
+    AccountTransactionsByIVR:
       type: object
+      required:
+      - DepAcctId
+      - AdditionalInfo
       properties:
-        DepAcctIdFrom:
-          $ref: '#/components/schemas/DepAcctIdFrom'
-        ContactInfo:
-          $ref: '#/components/schemas/ContactInfo'
-    CreateContactAccountResponse:
-      type: object
-      properties:
-        MsgRsHdr:
-          $ref: '#/components/schemas/MsgRsHdr'
-        ContactInfo:
-          $ref: '#/components/schemas/ContactInfo'
-    CreateContactAccountResponseBusinessError:
+        DepAcctId:
+          $ref: '#/components/schemas/DepAcctId'
+        AdditionalInfo:
+          $ref: '#/components/schemas/AdditionalInfo'
+    AccountTransactionsByIVRResponseSuccess:
       type: object
       properties:
         MsgRsHdr:
           $ref: '#/components/schemas/MsgRsHdr'
-    CreateContactAccountResponseError:
+        AcctDetails:
+          $ref: '#/components/schemas/AcctDetails'
+        PartyAcctRelRec:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartyAcctRelRec'
+    AccountTransactionsByIVRResponse:
       type: object
       properties:
         MsgRsHdr:
           $ref: '#/components/schemas/MsgRsHdr'
+    PartyAcctRelRec:
+      type: object
+      required:
+      - OpenDt
+      - Nickname
+      properties:
+        OpenDt:
+          type: string
+          description: "Fecha del movimiento"
+          example: 2021-12-29T00:00:00
+        Nickname:
+          type: string
+          description: "Código de Producto"
+          example: P580
+        AcctBal:
+          $ref: '#/components/schemas/AcctBal'
+        PartyAcctRelInfo:
+          $ref: '#/components/schemas/PartyAcctRelInfo'          
+    CurAmt:
+      required:
+      - Amt
+      type: object
+      properties:
+        Amt:
+          type: string
+          description: "Monto, los decimales se debe trabajar con punto(.)"
+          example: "12000.0"
+    BankInfo:
+      required:
+      - BranchId
+      type: object
+      properties:
+        BranchId:
+          type: string
+          description: Codigo que identifica a la oficina del banco
+          example: "018"
+    AcctDetails:
+      type: object
+      properties:
+        AcctDesc:
+          type: string
+          description: Descripción de la cuenta
+          example: OSCAR LEON
     MsgRsHdr:
       required:
       - Status
@@ -243,13 +375,15 @@ components:
         StatusCode:
           maximum: 99999
           minimum: 0
-          type: integer
+          type: string
           description: Codigo de respuesta
+          example: 0
         ServerStatusCode:
           maximum: 10
           minimum: 0
-          type: integer
+          type: string
           description: Codigo de respuesta del servidor
+          example: 0
         Severity:
           type: string
           description: Codigo de severidad de la respuesta
@@ -257,32 +391,35 @@ components:
           - Info
           - Warning
           - Error
-          minLength: 0
-          maxLength: 999999
+          example: Info
         StatusDesc:
           maxLength: 100
           minLength: 0
           type: string
           description: Explicacion asociada al statusCode
+          example: Transaccion Exitosa (o Transaccion rechazada en caso de error)
         AdditionalStatus:
           $ref: '#/components/schemas/AdditionalStatus'
         EndDt:
           type: string
           description: "Indica fecha de finalizacion, terminacion, etc."
           format: date-time
+          example: 2026-01-21 10:10:18.406356
     AdditionalStatus:
       type: object
       properties:
         StatusCode:
           maximum: 99999
           minimum: 0
-          type: integer
+          type: string
           description: Codigo de respuesta
+          example: 0
         ServerStatusCode:
           maximum: 10
           minimum: 0
-          type: integer
+          type: string
           description: Codigo de respuesta del servidor
+          example: 0
         Severity:
           type: string
           description: Codigo de severidad de la respuesta
@@ -290,22 +427,27 @@ components:
           - Info
           - Warning
           - Error
-          minLength: 0
-          maxLength: 9999
+          example: Info
         StatusDesc:
           maxLength: 100
           minLength: 0
           type: string
           description: Explicacion asociada al statusCode
-    DepAcctIdFrom:
+          example: Transaccion Exitosa (o Transaccion rechazada en caso de error)
+    AdditionalInfo:
+      required:
+      - OpenEnum
       type: object
       properties:
-        DepAcctId:
-          $ref: '#/components/schemas/DepAcctId'
+        OpenEnum:
+          maxLength: 99
+          minLength: 0
+          type: string
+          description: Identifica al tipo de cobro
+          example: 2
     DepAcctId:
       required:
       - AcctId
-      - AcctType
       type: object
       properties:
         AcctId:
@@ -313,86 +455,28 @@ components:
           minLength: 0
           type: string
           description: Identificador de una cuenta
-        AcctType:
-          type: string
-          description: "Tipo de cuenta AHO: Ahorros COR: Corriente DPE: Depósito electrónico"
-          enum:
-          - AHO
-          - COR
-          - DPE
+          example: 500800000785
+    DepAcctIdRes:
+      type: object
+      properties:
         BankInfo:
-          $ref: '#/components/schemas/BankInfo'
-    DepAcctIdTo:
+          $ref: '#/components/schemas/BankInfo'          
+    PartyAcctRelInfo:
       type: object
       properties:
         DepAcctId:
-          $ref: '#/components/schemas/DepAcctId'
-    ContactInfo:
+          $ref: '#/components/schemas/DepAcctIdRes'
+    AcctBal:
       type: object
-      properties:
-        ContactId:
-          minimum: 0
-          maximum: 99999999
-          type: integer
-          description: Identificador del contacto dentro de la agenda
-        ContactName:
-          type: string
-          description: Nombre del contacto
-          minLength: 0
-          maxLength: 999
-        NickName:
-          type: string
-          description: Alias del contacto
-          minLength: 0
-          maxLength: 999
-        GovIssueIdent:
-          $ref: '#/components/schemas/GovIssueIdent'
-        DepAcctIdTo:
-          $ref: '#/components/schemas/DepAcctIdTo'
-        Favorite:
-          type: boolean
-          description: Indica si se marca como favorita o no
-    BankInfo:
-      type: object
-      properties:
-        BankId:
-          type: string
-          description: Código del banco destino.
-          example: "2"
-          minLength: 1
-          maxLength: 99999999
-        Name:
-          type: string
-          description: Nombre del banco destino.
-          minLength: 0
-          maxLength: 99999999
-        BranchId:
-          type: string
-          description: Código de la oficina del banco origen.
-          minLength: 0
-          maxLength: 9999
       required:
-      - BankId
-    GovIssueIdent:
-      type: object
+      - BalType
+      - CurAmt
       properties:
-        GovIssueIdentType:
-          type: string
-          description: "Tipo de identificacion emitida por el gobierno del pais *CC\
-          \ - Cedula de ciudadania *CE: Cedula extrangeria \
-          \ *NIT_NAT: NIT Persona Natural *NIT_JUR: NIT Persona Juridica *PAS: Pasaporte *RC: Registro civil *TI: Tarjeta de\
-          \ identidad *FD: Fideicomiso"        
-          enum:
-          - CC
-          - CE
-          - NIT_NAT
-          - NIT_JUR
-          - PAS
-          - RC
-          - TI
-          - FD
-        IdentSerialNum:
-          type: string
-          description: Número de indetificación :)
+        BalType:
+          maxLength: 200
           minLength: 0
-          maxLength: 999
+          type: string
+          description: "Tipo de movimiento"
+          example: Efectivo
+        CurAmt:
+          $ref: '#/components/schemas/CurAmt'
