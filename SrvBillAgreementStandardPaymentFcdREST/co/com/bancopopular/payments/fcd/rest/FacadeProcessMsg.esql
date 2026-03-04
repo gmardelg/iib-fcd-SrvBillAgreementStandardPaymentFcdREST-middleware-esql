@@ -20,30 +20,6 @@ CREATE COMPUTE MODULE FacadeProcessMsgReqREST
 	CREATE FUNCTION Main() RETURNS BOOLEAN
 	BEGIN
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		-- Crear campos   
 		CREATE FIELD OutputRoot.Properties;
 		CREATE FIELD OutputRoot.MQMD;
