@@ -6,7 +6,7 @@ info:
     email: notificacionESB@bancopopular.com.co
   version: 1.0.0
 servers:
-- url: https://10.200.157.5:7859/accountsManagement/v1/Inquiries
+- url: https://10.200.157.5:7859/jibiup9r6fçtflp8f6tc/Inquiries
 paths:
   /AccountTransactionsByIVR:
     post:
