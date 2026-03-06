@@ -15,7 +15,7 @@ paths:
       summary: Notificación del recaudo asociado a un convenio.
       description: Notificación o pago de los conceptos asociados a un convenio desde
         el canal de oficinas a nivel nacional (Sofia)
-      operationId: TestPrueba
+      operationId: PostbillAgreementPayment1
       requestBody:
         content:
           application/json; charset=utf-8:
