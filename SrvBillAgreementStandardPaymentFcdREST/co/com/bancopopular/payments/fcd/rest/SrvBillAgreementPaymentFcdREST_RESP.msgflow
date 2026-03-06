@@ -9,7 +9,7 @@
     <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/SrvBillAgreementStandardPaymentFcdREST/icons/full/obj16/SrvBillAgreementPaymentFcdREST_RESP.gif"/>
     <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/SrvBillAgreementStandardPaymentFcdREST/icons/full/obj30/SrvBillAgreementPaymentFcdREST_RESP.gif"/>
     <composition>
-      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="440,150" dataSource="AUDITORIA" computeExpression="esql://routine/co.com.bancopopular.common.general#FacadeInfoErrorRespREST.Main" computeMode="destinationAndMessage">
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="440,150" dataSource="AUDITORIA" computeExpression="esql://routine/co.com.bancopopular.common.modules#FacadeInfoErrorRespREST.Main" computeMode="destinationAndMessage">
         <translation xmi:type="utility:ConstantString" string="CmpGetInfoError"/>
       </nodes>
 
