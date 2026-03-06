@@ -1,4 +1,4 @@
-openapi: 3.0.1
+openapi: 3.1.1
 info:
   title: BillAgreementStandardPayment
   description: Servicio diseñado para la notificación o pago de conceptos asociados
@@ -6,7 +6,7 @@ info:
     el canal de oficinas a nivel nacional (Sofia).
   version: 1.0.0
 servers:
-- url: https://agreementsManagement/v1/Payments/Agreement
+- url: https://10.200.157.5:7859/agreementsManagement/v1/Payments/Agreement
 paths:
   /Notify:
     post:
@@ -162,6 +162,11 @@ components:
           - X-GovIssueIdentType
           - X-IdentSerialNum
           - X-BankId
+          - X-Reverse
+          - X-Language
+          - X-ClientDt
+          - X-BankIdType          
+          - X-BranchId          
           properties:
             X-RqUID:
               maxLength: 30
@@ -230,6 +235,19 @@ components:
               format: date-time
               description: Fecha de compensación en formato DateTime. YYYY-MM-DDThh:mm:ss
               example: "2024"      
+            X-Reverse:
+              type: boolean
+              default: True
+              description: "Indicador de Reverso, con un valor booleano constante True"    
+            X-ClientDt:
+              type: string
+              format: date-time
+              description: Fecha y hora del cliente en formato DateTime.
+              example: "2025-01-15T10:30:00"   
+            X-Language:
+              type: string
+              description: Idioma de la solicitud.
+              example: "es"                
         Period:
           type: string
           description: Fecha de la Transacción en formato DateTime
