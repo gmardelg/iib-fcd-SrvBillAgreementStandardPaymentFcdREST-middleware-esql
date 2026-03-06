@@ -22,7 +22,7 @@
       <nodes xmi:type="ComIbmWSReply.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_3" location="695,259">
         <translation xmi:type="utility:ConstantString" string="HTTP Reply"/>
       </nodes>
-      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_4" location="519,258" dataSource="AUDITORIA" computeExpression="esql://routine/co.com.bancopopular.common.modules#FacadeProcessMsgResREST.Main" computeMode="destinationAndMessage">
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_4" location="519,258" dataSource="AUDITORIA" computeExpression="esql://routine/co.com.bancopopular.common.general#FacadeProcessMsgResREST.Main" computeMode="destinationAndMessage">
         <translation xmi:type="utility:ConstantString" string="CmpReceiveMsgRs"/>
       </nodes>
       <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_5" location="569,314" queueName="LOG.REGISTER.REQ" transactionMode="no">
