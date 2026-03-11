@@ -376,16 +376,14 @@ components:
           description: Codigo de respuesta
           example: "0"
         ServerStatusCode:
-          maxLength: 10
-          minLength: 1
           type: string
           description: Codigo de respuesta del servidor
           example: "0"
         Severity:
           type: string
-          maxLength: 7
-          minLength: 4
-          description: Codigo de severidad de la respuesta
+          maxLength: 4
+          minLength: 7
+          description: 
           enum:
           - Info
           - Warning
