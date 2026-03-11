@@ -376,14 +376,16 @@ components:
           description: Codigo de respuesta
           example: "0"
         ServerStatusCode:
+          maxLength: 10
+          minLength: 1
           type: string
           description: Codigo de respuesta del servidor
           example: "0"
         Severity:
           type: string
-          maxLength: 4
-          minLength: 7
-          description: 
+          maxLength: 7
+          minLength: 4
+          description: Codigo de severidad de la respuesta
           enum:
           - Info
           - Warning
@@ -401,6 +403,7 @@ components:
           type: string
           description: "Indica fecha de finalizacion, terminacion, etc."
           format: date-time
+          example: 2026-03-05T15:22:30
     AdditionalStatus:
       type: object
       properties:
