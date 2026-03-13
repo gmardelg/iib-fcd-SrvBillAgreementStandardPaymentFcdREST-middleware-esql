@@ -495,7 +495,6 @@ components:
           example: true
       required:
       - ContactId
-      - Favorite
     BankInfo:
       type: object
       properties:
