@@ -19,7 +19,7 @@ paths:
       - name: X-RqUID
         in: header
         description: Identificador unico del mensaje
-        required: false
+        required: true
         schema:
           maxLength: 32
           minLength: 1
