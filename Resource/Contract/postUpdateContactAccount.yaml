@@ -465,6 +465,8 @@ components:
         DepAcctId:
           $ref: '#/components/schemas/DepAcctId'
     ContactInfo:
+      required:
+      - Favorite
       type: object
       properties:
         ContactId:
