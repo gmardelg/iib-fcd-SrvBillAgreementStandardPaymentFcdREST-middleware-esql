@@ -465,8 +465,6 @@ components:
         DepAcctId:
           $ref: '#/components/schemas/DepAcctId'
     ContactInfo:
-      required:
-      - Favorite
       type: object
       properties:
         ContactId:
@@ -497,6 +495,7 @@ components:
           example: true
       required:
       - ContactId
+      - Favorite
     BankInfo:
       type: object
       properties:
