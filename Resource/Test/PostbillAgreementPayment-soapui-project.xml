@@ -65,7 +65,7 @@ Notificación del recaudo asociado a un convenio.</con:description><con:settings
         },
         "Addr1": "Car. 3A#17-28"
     }
-}</con:request><con:originalUri>https://10.200.157.5/Payment/BillAgreement/Notify</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/><con:parameterOrder/></con:request><con:request name="Error de Negocio" id="253d8e44-ec86-4543-9b22-93d0eebf2c9c" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://10.200.157.5:7859</con:endpoint><con:request>{
+}</con:request><con:originalUri>https://10.200.157.5/Payments/Agreement/Notify</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/><con:parameterOrder/></con:request><con:request name="Error de Negocio" id="253d8e44-ec86-4543-9b22-93d0eebf2c9c" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://10.200.157.5:7859</con:endpoint><con:request>{
    "trace": {
       "X-RqUID": "${=java.lang.System.currentTimeMillis()}",
       "X-Channel": "CANALES",
