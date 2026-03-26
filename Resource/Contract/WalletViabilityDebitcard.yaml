@@ -1,0 +1,468 @@
+openapi: 3.0.0
+
+info:
+  title: "WalletViabilityDebitcard"
+  version: "1.0.0"
+  description: "Para proyecto Google Pay (Billetera Digital) VISA, se requiere la integracion de servicios que permitan verificar las Tarjetas Debito vigentes, optimas para el enrolamiento con la billetera. Asi mismo la integracion de los mismos con las especificaciones de la mesa de servicios transversales  ADL para la exposicion de la billetera desde los canales digitales del banco"
+  contact:
+    email: "notificacionESB@bancopopular.com.co"
+
+servers:
+  - url: "https://bancopopular.com.co/cardsManagement/v1/Inquiries"
+    
+paths:
+  /WalletViabilityDebitcard:
+    post:
+      tags:
+        - "/cardsManagement/v1/Inquiries/"
+      summary: "Permite Validar tarjetas debito Para la Billetera Digital"
+      description: "Permite Validar tarjetas debito Para la Billetera Digital"
+      operationId: "WalletViabilityDebitcard"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WalletViabilityDebitcardRequest"
+      responses:
+        '201':
+          description: "Transacción Exitosa"
+          headers:
+            X-RqUID:
+              description: "Identificador único de la invocación"
+              schema:
+                type: string
+            X-ApprovalId:
+              description: "Número de autorización de la transacción"
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WalletViabilityDebitcardResponse"
+        '206':
+          description: "Se generó un error de negocio"
+          headers:
+            X-RqUID:
+              description: "Identificador único de la invocación"
+              schema:
+                type: string
+            X-ApprovalId:
+              description: "Número de autorización de la transacción"
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MsgRsHdr"
+        '400':
+          description: "Petición incorrecta"
+          headers:
+            X-RqUID:
+              description: "Identificador único de la invocación"
+              schema:
+                type: string
+            X-ApprovalId:
+              description: "Número de autorización de la transacción"
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MsgRsHdr"
+        '500':
+          description: "Error interno en el servidor"
+          headers:
+            X-RqUID:
+              description: "Identificador único de la invocación"
+              schema:
+                type: string
+            X-ApprovalId:
+              description: "Número de autorización de la transacción"
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MsgRsHdr"
+        '504':
+          description: "Timeout"
+          headers:
+            X-RqUID:
+              description: "Identificador único de la invocación"
+              schema:
+                type: string
+            X-ApprovalId:
+              description: "Número de autorización de la transacción"
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MsgRsHdr"
+        '412':
+          description: "RqUID es requerido"
+          headers:
+            X-RqUID:
+              description: "Identificador único de la invocación"
+              schema:
+                type: string
+            X-ApprovalId:
+              description: "Número de autorización de la transacción"
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MsgRsHdr"   
+        '408':
+          description: "Timeout del backend"
+          headers:
+            X-RqUID:
+              description: "Identificador único de la invocación"
+              schema:
+                type: string
+            X-ApprovalId:
+              description: "Número de autorización de la transacción"
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MsgRsHdr"   
+        '420':
+          description: "Error en el backend"
+          headers:
+            X-RqUID:
+              description: "Identificador único de la invocación"
+              schema:
+                type: string
+            X-ApprovalId:
+              description: "Número de autorización de la transacción"
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MsgRsHdr"     
+      parameters:
+        - name: "X-RqUID"
+          in: "header"
+          required: true
+          schema:
+            type: "string"
+            minLength: 1
+            maxLength: 32
+          description: "Identificador único de la transacción"
+          example: "16012019001"
+        - name: "X-Channel"
+          in: "header"
+          required: true
+          schema:
+            type: "string"
+            maxLength: 20
+            minLength: 1
+          description: "Canal origen de la invocación"
+          example: "FB, ICBS, MB, PB, MONITOR"
+        - name: "X-CompanyId"
+          in: "header"
+          required: true
+          schema:
+            type: "string"
+            maxLength: 10
+            minLength: 1
+          description: "Empresa origen de la invocación"
+          example: "0052"
+        - name: "X-GovIssueIdentType"
+          in: "header"
+          required: false
+          schema:
+            type: "string"
+            maxLength: 7
+            minLength: 0
+          description: "Tipo de identificación usuario que genera la invocación"
+          example: "CC"
+        - name: "X-IdentSerialNum"
+          in: "header"
+          required: true
+          schema:
+            type: "string"
+            maxLength: 20
+            minLength: 1
+          description: "Identificación del usuario que genera la invocación"
+          example: "79845117"
+        - name: "X-IPAddr"
+          in: "header"
+          required: true
+          schema:
+           type: "string"
+           maxLength: 15
+           minLength: 1
+           format: "ipv4"
+          description: "IP origen de la invocación"
+          example: "10.130.3.26"
+        - name: "X-SessKey"
+          in: "header"
+          required: false
+          schema:
+            type: "string"
+            maxLength: 1000
+            minLength: 0
+          description: "Sesión del usuario"
+        - name: "X-Version"
+          in: "header"
+          required: false
+          schema:
+            type: "string"
+            maxLength: 20
+            minLength: 0
+          description: "Versión de la aplicacion"
+          example: "8.54.1" 
+        - name: "X-KeyAcctId"
+          in: "header"
+          required: false
+          schema:
+            type: "string"
+            maxLength: 15
+            minLength: 0
+          description: "Llave de identificación de cuenta"
+          example: "002587553"              
+        - name: "X-BankId"
+          in: "header"
+          required: true
+          schema:
+            type: "string"
+            maxLength: 10
+            minLength: 1
+          description: "Identificador del Banco"
+          example: "0023"
+        - name: "X-BankIdType"
+          in: "header"
+          required: true
+          schema:
+            type: "string"
+            maxLength: 15
+            minLength: 1
+          description: "Jornada de la Transaccion"
+          example: "1"
+        - name: "X-BranchId"
+          in: "header"
+          required: true
+          schema:
+            type: "string"
+            maxLength: 10
+            minLength: 1
+          description: "Identificador de la oficina"
+          example: "0023"
+        - name: "X-ClientDt"
+          in: "header"
+          required: true
+          schema:
+            type: "string"
+            format: "date-time"
+          description: "Fecha y hora de la solicitud"
+          example: "2018-02-20T17:56:36.417"
+        - name: "X-NextDay"
+          in: "header"
+          required: true
+          schema:
+            type: "string"
+            format: "date-time"
+          description: "Fecha de compensación"
+          example: "2018-02-20T17:56:36.417"      
+        - name: "X-Reverse"
+          in: "header"
+          required: true
+          schema:
+           type: "boolean"
+          description: "Reverso"
+          example: true
+        - name: "X-Language"
+          in: "header"
+          required: true
+          schema:
+            type: "string"
+            maxLength: 5
+            minLength: 1
+          description: "Lenguaje en que requiere la respuesta"
+          example: "es_CO"     
+components:
+  schemas:
+    WalletViabilityDebitcardRequest:
+      type: "object"
+      description: "Datos de Tarjeta"
+      properties:
+        CardAcctId:
+          type: "object"
+          description: "Datos de Tarjeta"
+          properties:
+            CardEmbossNum:
+              type: "string"
+              description: "CardNumber"
+              minLength: 1
+              maxLength: 18
+              example: '4205599906221300'
+          required:
+          - "CardEmbossNum"
+      required:
+      - "CardAcctId"
+      xml:
+        name: WalletViabilityDebitcard
+
+    WalletViabilityDebitcardResponse:
+      type: "object"
+      properties:
+        MsgRsHdr:
+          $ref: "#/components/schemas/MsgRsHdr"
+        CardAcctId:
+          $ref: "#/components/schemas/CardAcctId"  
+        DepAcctId:
+          $ref: "#/components/schemas/DepAcctId" 
+        CCMotoAcct:
+          $ref: "#/components/schemas/CCMotoAcct" 
+        CardStatus:
+          $ref: "#/components/schemas/CardStatus" 
+      required:
+        - "MsgRsHdr"
+
+    MsgRsHdr:
+      type: "object"
+      properties:
+        Status:
+          $ref: "#/components/schemas/Status"
+      required:
+        - "Status"
+
+    Status:
+      type: "object"
+      properties:
+        StatusCode:
+          type: "string"
+          description: "Codigo de respuesta del API"
+          minLength: 1
+          maxLength: 100
+          example: "300"
+        ServerStatusCode:
+          type: "string"
+          description: "Codigo de respuesta del backend"
+          minLength: 1
+          maxLength: 100
+          example: "300"
+        Severity:
+          type: "string"
+          maxLength: 7
+          minLength: 4
+          enum:
+            - "Info"
+            - "Warning"
+            - "Error"
+          description: "Info, Warning, Error"
+          example: "Error"
+        StatusDesc:
+          type: "string"
+          minLength: 1
+          maxLength: 100
+          description: "Mensaje descriptivo de la respuesta"
+          example: "No existe información para los criterios seleccionados"
+        AdditionalStatus:
+          $ref: "#/components/schemas/AdditionalStatus"
+        EndDt:
+          type: "string"
+          format: "date-time"
+          description: "Indica fecha de finalización, terminación, etc"
+          example: "2026-03-17 11:23:00.687410"
+      required:
+        - "StatusCode"
+        - "Severity"
+        - "StatusDesc"
+        - "AdditionalStatus"
+
+    AdditionalStatus:
+      description: "Información adicional de respuesta, se puede considerar respuesta de backend"
+      type: "object"
+      properties:
+        StatusCode:
+          description: "Codigo de respuesta"
+          type: "string"
+          minLength: 1
+          maxLength: 100
+          example: "300"
+        ServerStatusCode:
+          description: "Codigo de respuesta del servidor"
+          type: "string"
+          minLength: 1
+          maxLength: 100
+          example: "300"
+        Severity:
+          description: "Codigo de severidad de la respuesta"
+          type: "string"
+          maxLength: 7
+          minLength: 4
+          enum:
+            - "Info"
+            - "Warning"
+            - "Error"
+          example: "Error"
+        StatusDesc:
+          description: "Explicacion asociada al statusCode"
+          type: "string"
+          minLength: 1
+          maxLength: 100
+          example: "No existe información para los criterios seleccionados"
+      required:
+        - "StatusCode"
+        - "StatusDesc"
+
+    CardAcctId:
+            type: "object"
+            properties:
+                CardEmbossNum:
+                    type: "string"
+                    description: "CardNumber"
+                    minLength: 1
+                    maxLength: 99999
+                    example: 'eyJhbGciOiJSU0EtT0FFUC0yNTYiLCJpYXQiOjE3NTg1NTg5NTUsImVuYyI6IkEyNTZHQ00iLCJraWQiOiJEWGlIRXlhQlBqSHJTT3dQMjRKSHE4YkVGTEdGUmxvSVBOaDRUWWFZb0Q0In0.IF6YBxV59Ax44jnS7cFt-QW8PuMBSBbtaddt7E8EsLFjGCuMjdVxeuWf9fSbczCMO0EBi8FfpmqYmlz-vK6e1DO2um4N00Qo4JlGnmPn7ZjYzYPWIS38zSX-b5LcifYJDZSIvqShejaVCxkgIEQYXW5zX46UlRu8gIewoX-z2Qqn_49uWlklN6pbK5i_TMnIqtyCRGMmjzOCYw2Ss1woeMD6Vq6E5dGkyK68dud6W7GKxur7ALtKqNSnW1cqVppXFrgXdkhSE0LEq_orbn5bBAYRjH6NQy-RsTQaOK1V6PS2iyZDT7IItd68TlheCuHwsN-sMOZjoFBy4s--pcoZvkUocKXy9fm7ZGqX5WVQ-Tm-DY8qTRB_HJSxbkuUWHmv5p98aQcdLFW159L0rK-hDsu_PHZ1q887Ld_yZXSDZtkLcqiVNN4dlYRa6w8Yq8ztGqMTyU3je7j6eT0D2E7X0-URhkno0h_G7dXpc83hvpv0f3OfiDpWY9EYlIJZ8k1luZrAuElYImCEqL0UO9CGIyCy12Ek2iVFDxKeujM-njQvXgcZy_IqOymH56XpRYp_P1Fhf-dlTTweonZRYThIOweeau5RrAOnhyex7ZTHn4DsA8J4ERRdczkLHyUDaUUV7h7gUYUxpMPTMSSoEWNOSH0Vw_6ohgWolTVkYgz8zEQ.ZGCx_kHF_VevjPXb.2v1YWcdWPMkl6wKTe2efNg.Wzo-C6GpERsU4ZevuSa9oQ'
+            required:
+                - "CardEmbossNum"
+    DepAcctId:
+            type: "object"
+            properties:
+                Nickname:
+                    type: "string"
+                    description: "CustomerName"
+                    minLength: 0
+                    maxLength: 30
+                    example: "JUAN LOPEZ"
+    CCMotoAcct:
+            type: "object"
+            properties:
+                Phone: 
+                    type: "string"
+                    description: "PhoneNumber"
+                    minLength: 0
+                    maxLength: 15
+                    example: 3115552233
+                NextCardExpDt: 
+                    type: "string"
+                    description: "NextCardExpDt"
+                    minLength: 0
+                    maxLength: 5
+                    example: "0830"
+                Desc: 
+                    type: "string"
+                    description: "description"
+                    minLength: 0
+                    maxLength: 30
+                    example: "description"
+    CardStatus:
+            type: "object"
+            properties:
+                PreApproved:
+                    type: "string"
+                    description: "ApprovalId"
+                    minLength: 1
+                    maxLength: 1
+                    example: "A"
+            required: 
+                - "PreApproved"
+        
