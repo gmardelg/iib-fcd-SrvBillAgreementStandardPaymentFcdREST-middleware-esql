@@ -6,9 +6,9 @@ info:
     email: notificacionESB@bancopopular.com.co
   version: 1.0.0
 servers:
-- url: https://10.200.157.5:7859/transfersManagement/v1/Xfer/TransfersSPIOnUs/AddFundTransfer
+- url: https://10.200.157.5:7859/transfersManagement/v1/Xfer/TransfersSPIOnUs
 paths:
-  /UpdateContact:
+  /AddFundTransfer:
     post:
       tags:
       - UpdateContact
