@@ -6,7 +6,7 @@ info:
     el canal de oficinas a nivel nacional (Sofia).
   version: 1.0.0
 servers:
-- url: https://agreementsManagement/v1/Payments/Agreement
+- url: https://transfersManagement/v1/Xfer/TransfersSPIOnUs/AddFundTransfer
 paths:
   /Notify:
     post:
