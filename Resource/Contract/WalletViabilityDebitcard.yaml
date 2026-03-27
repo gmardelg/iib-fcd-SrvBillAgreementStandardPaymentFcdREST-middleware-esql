@@ -8,7 +8,7 @@ info:
     email: "notificacionESB@bancopopular.com.co"
 
 servers:
-  - url: "https://bancopopular.com.co/transfersManagement/v1/Xfer/TransfersSPIOnUs/AddFundTransfer"
+  - url: "https://bancopopular.com.co/cardsManagement/v1/Inquiries"
     
 paths:
   /WalletViabilityDebitcard:
@@ -465,4 +465,3 @@ components:
                     example: "A"
             required: 
                 - "PreApproved"
-        
