@@ -6,7 +6,7 @@ info:
     de un recaudo desde el canal de oficinas (Sofia).
   version: 1.0.0
 servers:
-- url: https://agreementsManagement/v1/Payments/Bill
+- url: https://agreementsManagement/v1/Payments/Bil
 paths:
   /Rollback:
     post:
