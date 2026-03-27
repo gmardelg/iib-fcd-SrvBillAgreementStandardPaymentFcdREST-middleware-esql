@@ -11,7 +11,7 @@ paths:
   /AddFundTransfer:
     post:
       tags:
-      - UpdateContact
+      - AddFundTransfer
       summary: Modifica un contacto en la agenda de AST para transferencias
       description: Modifica un contacto específico en la agenda de AST para transferencias
       operationId: postUpdateContactAccount
