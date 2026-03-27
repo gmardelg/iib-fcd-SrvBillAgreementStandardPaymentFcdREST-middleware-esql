@@ -417,7 +417,7 @@ components:
             type: "object"
             properties:
                 CardEmbossNum:
-                    type: "string"
+                    type: "integer"
                     description: "CardNumber"
                     minLength: 1
                     maxLength: 99999
