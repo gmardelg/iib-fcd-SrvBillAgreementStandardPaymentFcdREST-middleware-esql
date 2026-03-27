@@ -297,7 +297,7 @@ components:
           description: "Datos de Tarjeta"
           properties:
             CardEmbossNum:
-              type: "string"
+              type: "Integer"
               description: "CardNumber"
               minLength: 1
               maxLength: 18
