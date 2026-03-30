@@ -35,6 +35,14 @@
         <translation xmi:type="utility:ConstantString" string="ThrowInqConfigApp"/>
         <shortDescription xmi:type="utility:ConstantString" string="No se encuentra configuración de servicio."/>
       </nodes>
+  <nodes xmi:type="ComIbmTrace.msgnode:FCMComposite_1" 
+         xmi:id="FCMComposite_1_1" 
+         location="250,150" 
+         pattern="[${Root}]"
+         destination="file"
+         filePath="/var/log/trace.txt">
+    <translation xmi:type="utility:ConstantString" string="Trace"/>
+  </nodes>
       <nodes xmi:type="SRRetrieveEntity.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_10" location="507,260" name="Default" serviceVersion="1.0" depthPolicy="MatchOnly">
         <translation xmi:type="utility:ConstantString" string="RLGetConfigParams"/>
       </nodes>
