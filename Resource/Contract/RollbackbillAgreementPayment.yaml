@@ -1,30 +1,180 @@
 openapi: 3.0.0
 info:
-  title: BillAgreementStandardPayment
-  description: Servicio diseñado para la notificación o pago de conceptos asociados
-    a un convenio. El método  POST /Rollback permite reversar o debitar la notificación
-    de un recaudo desde el canal de oficinas (Sofia).
+  title: SrvBusquedaEmpleadosCelula
+  description: Retorna un listado de empleados filtrados por vicepresidencia, gerencia y celula
+  contact:
+    email: notificacionESB@bancopopular.com.co
   version: 1.0.0
 servers:
-- url: https://agreementsManagement/v1/Payments/Bill
+  - url: https://{ip}:{puerto}/recursosHumanos/v1/Celulas
+    variables:
+      ip:
+        default: 10.200.157.5
+        description: IP o hostname del servidor
+      puerto:
+        default: '7859'
+        description: Puerto de conexion del servidor
 paths:
-  /Rollback:
+  /empleados/busqueda:
     post:
       tags:
-      - /Rollback
-      summary: Reversar notificación del recaudo asociado a un convenio.
-      description: Reversar la notificación o pago de los conceptos asociados a un
-        convenio desde el canal de oficinas a nivel nacional (Sofia)
-      operationId: RollbackbillAgreementPayment
+        - BusquedaEmpleadosCelula
+      summary: Retorna un listado de empleados filtrados por vicepresidencia, gerencia y celula
+      description: Retorna un listado de empleados filtrados por vicepresidencia, gerencia y celula
+      operationId: postBusquedaEmpleadosCelula
+      parameters:
+        - name: X-RqUID
+          in: header
+          description: Identificador único del mensaje
+          required: true
+          schema:
+            type: string
+            maxLength: 32
+            minLength: 1
+          example: '202603221200001'
+        - name: X-Channel
+          in: header
+          description: Canal origen de consumo de la transacción
+          required: true
+          schema:
+            type: string
+            maxLength: 20
+            minLength: 1
+            enum:
+              - BM
+              - PB
+          example: BM
+        - name: X-CompanyId
+          in: header
+          description: Codigo de empresa que realiza la invocación
+          required: true
+          schema:
+            type: string
+            maxLength: 10
+            minLength: 1
+          example: '0002'
+        - name: X-GovIssueIdentType
+          in: header
+          description: Tipo de identificación emitida por el gobierno del país
+          required: false
+          schema:
+            type: string
+            maxLength: 20
+            minLength: 1
+          example: '1'
+        - name: X-IdentSerialNum
+          in: header
+          description: Número de identificación de la persona que realiza la invocación
+          required: true
+          schema:
+            type: string
+            maxLength: 20
+            minLength: 1
+          example: '340141001'
+        - name: X-IPAddr
+          in: header
+          description: IP del dispositivo
+          required: true
+          schema:
+            type: string
+            maxLength: 15
+            minLength: 1
+            format: ipv4
+          example: 179.1.89.18
+        - name: X-SessKey
+          in: header
+          description: Código de sesión
+          required: false
+          schema:
+            type: string
+            maxLength: 99
+            minLength: 1
+          example: 65tf76t7f7td7fdo5dtyg877hijyio89
+        - name: X-Version
+          in: header
+          description: Versión del servicio
+          required: false
+          schema:
+            type: string
+            maxLength: 20
+            minLength: 1
+          example: '1.0'
+        - name: X-KeyAcctId
+          in: header
+          description: Llave de identificación de cuenta
+          required: false
+          schema:
+            type: string
+            maxLength: 15
+            minLength: 1
+          example: '2'
+        - name: X-BankId
+          in: header
+          description: Identificador del banco
+          required: true
+          schema:
+            type: string
+            maxLength: 99
+            minLength: 1
+          example: '0002'
+        - name: X-BankIdType
+          in: header
+          description: Jornada de la transacción
+          required: true
+          schema:
+            type: string
+            maxLength: 1
+            minLength: 1
+          example: '1'
+        - name: X-BranchId
+          in: header
+          description: Identificador de la oficina
+          required: true
+          schema:
+            type: string
+            maxLength: 10
+            minLength: 1
+          example: '001'
+        - name: X-ClientDt
+          in: header
+          description: Fecha de transacción (AAAA-MM-DDThh:mm:ss)
+          required: true
+          schema:
+            type: string
+            format: date-time
+          example: '2026-03-22T08:00:00'
+        - name: X-NextDay
+          in: header
+          description: Próxima fecha hábil (AAAA-MM-DDThh:mm:ss)
+          required: true
+          schema:
+            type: string
+            format: date-time
+          example: '2026-03-23T08:00:00'
+        - name: X-Reverse
+          in: header
+          description: Indicador de reverso
+          required: true
+          schema:
+            type: boolean
+          example: false
+        - name: X-Language
+          in: header
+          description: 'Idioma (ISO 639 + guion + ISO 3166, ej: es_CO)'
+          required: true
+          schema:
+            type: string
+            maxLength: 5
+            minLength: 5
+          example: es_CO
       requestBody:
-        content:
-          application/json; charset=utf-8:
-            schema:
-              $ref: '#/components/schemas/ReqbillAgreement'
         required: true
-        Amt: 5000
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BusquedaEmpleadosCelulaRequest'
       responses:
-        "201":
+        '201':
           description: Transacción Exitosa
           headers:
             X-ApprovalId:
@@ -32,29 +182,29 @@ paths:
               schema:
                 type: string
             X-RqUID:
-              description: Identificador Unico de la transacción
+              description: Identificador único de la invocación
               schema:
                 type: string
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
-                $ref: '#/components/schemas/RespbillAgreement'
-        "206":
-          description: Se genero un error de negocio
+                $ref: '#/components/schemas/BusquedaEmpleadosCelulaResponse'
+        '206':
+          description: Error en la transacción (negocio)
           headers:
             X-ApprovalId:
               description: Número de autorización de la transacción
               schema:
                 type: string
             X-RqUID:
-              description: Identificador Unico de la transacción
+              description: Identificador único de la invocación
               schema:
                 type: string
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
-                $ref: '#/components/schemas/ErrorbillAgreement'
-        "400":
+                $ref: '#/components/schemas/BusquedaEmpleadosCelulaResponseBusinessError'
+        '400':
           description: Petición incorrecta
           headers:
             X-ApprovalId:
@@ -62,14 +212,29 @@ paths:
               schema:
                 type: string
             X-RqUID:
-              description: Identificador Unico de la transacción
+              description: Identificador único de la invocación
               schema:
                 type: string
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
-                $ref: '#/components/schemas/ErrorbillAgreement'
-        "408":
+                $ref: '#/components/schemas/BusquedaEmpleadosCelulaResponseError'
+        '404':
+          description: Recurso no existe
+          headers:
+            X-ApprovalId:
+              description: Número de autorización de la transacción
+              schema:
+                type: string
+            X-RqUID:
+              description: Identificador único de la invocación
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusquedaEmpleadosCelulaResponseError'
+        '408':
           description: Timeout del backend
           headers:
             X-ApprovalId:
@@ -77,29 +242,29 @@ paths:
               schema:
                 type: string
             X-RqUID:
-              description: Identificador Unico de la transacción
+              description: Identificador único de la invocación
               schema:
                 type: string
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
-                $ref: '#/components/schemas/ErrorbillAgreement'
-        "412":
-          description: RqUI requerido
+                $ref: '#/components/schemas/BusquedaEmpleadosCelulaResponseError'
+        '412':
+          description: X-RqUID es requerido
           headers:
             X-ApprovalId:
               description: Número de autorización de la transacción
               schema:
                 type: string
             X-RqUID:
-              description: Identificador Unico de la transacción
+              description: Identificador único de la invocación
               schema:
                 type: string
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
-                $ref: '#/components/schemas/ErrorbillAgreement'
-        "420":
+                $ref: '#/components/schemas/BusquedaEmpleadosCelulaResponseError'
+        '420':
           description: Error en el backend
           headers:
             X-ApprovalId:
@@ -107,29 +272,59 @@ paths:
               schema:
                 type: string
             X-RqUID:
-              description: Identificador Unico de la transacción
+              description: Identificador único de la invocación
               schema:
                 type: string
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
-                $ref: '#/components/schemas/ErrorbillAgreement'
-        "500":
-          description: Error interno en el servidor
+                $ref: '#/components/schemas/BusquedaEmpleadosCelulaResponseError'
+        '500':
+          description: Ha ocurrido un error en la invocación
           headers:
             X-ApprovalId:
               description: Número de autorización de la transacción
               schema:
                 type: string
             X-RqUID:
-              description: Identificador Unico de la transacción
+              description: Identificador único de la invocación
               schema:
                 type: string
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
-                $ref: '#/components/schemas/ErrorbillAgreement'
-        "508":
+                $ref: '#/components/schemas/BusquedaEmpleadosCelulaResponseError'
+        '501':
+          description: Operación no implementada
+          headers:
+            X-ApprovalId:
+              description: Número de autorización de la transacción
+              schema:
+                type: string
+            X-RqUID:
+              description: Identificador único de la invocación
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusquedaEmpleadosCelulaResponseError'
+        '503':
+          description: Servidor no disponible
+          headers:
+            X-ApprovalId:
+              description: Número de autorización de la transacción
+              schema:
+                type: string
+            X-RqUID:
+              description: Identificador único de la invocación
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusquedaEmpleadosCelulaResponseError'
+        '504':
           description: Timeout
           headers:
             X-ApprovalId:
@@ -137,289 +332,252 @@ paths:
               schema:
                 type: string
             X-RqUID:
-              description: Identificador Unico de la transacción
+              description: Identificador único de la invocación
               schema:
                 type: string
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
-                $ref: '#/components/schemas/ErrorbillAgreement'
-      x-codegen-request-body-name: body
+                $ref: '#/components/schemas/BusquedaEmpleadosCelulaResponseError'
 components:
   schemas:
-    ReqbillAgreement:
-      required:
-      - trace
-      - InvoiceInfo
+    BusquedaEmpleadosCelulaRequest:
       type: object
       properties:
-        trace:
-          type: object
-          required:
-          - X-RqUID
-          - X-Channel
-          - X-CompanyId
-          - X-GovIssueIdentType
-          - X-IdentSerialNum
-          - X-BankId
-          - X-BankIdType
-          - X-BranchId
-          - X-NextDay
-          - X-Reverse
-          - X-Language
-          - X-ClientDt          
-          properties:
-            X-RqUID:
-              maxLength: 30
-              minLength: 1
-              type: string
-              description: Identificador único de la transacción.
-              example: "16012019000"
-            X-Channel:
-              maxLength: 20
-              minLength: 1
-              type: string
-              description: Canal origen de la invocación.
-              example: "CANALES"
-            X-CompanyId:
-              maxLength: 10
-              minLength: 1
-              type: string
-              description: Código de la empresa que origina la invocación.
-              example: "0002"
-            X-GovIssueIdentType:
-              type: string
-              description: Tipo de identificación del operador que consume el servicio.
-              example: "CC"
-            X-IdentSerialNum:
-              maxLength: 20
-              minLength: 1
-              type: string
-              description: Número de identificación del operador que consume el servicio.
-              example: "79845117"
-            X-Version:
-              type: string
-              description: Versión de la aplicación.
-              example: "1.0.0"
-            X-BankIdType:
-              maxLength: 15
-              minLength: 0
-              type: string
-              description: Identificador del banco.
-              example: "002"
-            X-BankId:
-              maxLength: 10
-              minLength: 1
-              type: string
-              description: Código identificador del banco.
-              example: "002"
-            X-BranchId:
-              maxLength: 20
-              minLength: 0
-              type: string
-              description: Identificador de la Oficina /sucursal.
-              example: "040"
-            X-BranchName:
-              type: string
-              description: Nombre de la terminal.
-              example: "W010956GZQ27"
-            X-IPAddr:
-              type: string
-              description: IP origen de la invocación.
-              example: "192.10.20.123"
-            X-KeyAcctId:
-              type: string
-              description: Identificador interno.
-              example: "2"
-            X-NextDay:
-              type: string
-              format: date-time
-              description: Fecha de compensación en formato DateTime. YYYY-MM-DDThh:mm:ss
-              example: "2025-07-25"    
-            X-Reverse:
-              type: boolean
-              default: True
-              description: "Indicador de Reverso, con un valor booleano constante True"    
-            X-ClientDt:
-              type: string
-              format: date-time
-              description: Fecha y hora del cliente en formato DateTime.
-              example: "2025-01-15T10:30:00"   
-            X-Language:
-              type: string
-              description: Idioma de la solicitud.
-              example: "es"              
-        Period:
+        VpName:
           type: string
-          description: Fecha de la Transacción en formato DateTime
-          format: date-time
-        InvoiceInfo:
-          $ref: '#/components/schemas/InvoiceInfo'
-      description: Reversar notificación de los conceptos asociados a un convenio
-    ErrorStatus:
-      required:
-      - Status
-      type: object
-      properties:
-        Status:
-          required:
-          - AdditionalStatus
-          - EndDt
-          - Severity
-          - StatusCode
-          - StatusDesc
-          type: object
-          properties:
-            StatusCode:
-              type: string
-              description: Código de respuesta del API
-              enum:
-              - "0"
-              - "100"
-            Severity:
-              type: string
-              description: Código de severidad de la respuesta
-              example: Error
-              enum:
-              - Info
-              - Error
-            StatusDesc:
-              maxLength: 300
-              minLength: 1
-              type: string
-              description: Descripción del estado de la consulta
-            AdditionalStatus:
-              required:
-              - ServerStatusCode
-              - StatusDesc
-              type: object
-              properties:
-                ServerStatusCode:
-                  type: string
-                  description: Código de respuesta del servidor
-                Severity:
-                  type: string
-                  description: Código de severidad de la respuesta
-                  example: Error
-                StatusDesc:
-                  maxLength: 300
-                  minLength: 1
-                  type: string
-                  description: Descripción detallada del estado de la consulta
-              description: Información adicional de la respuesta
-            EndDt:
-              type: string
-              description: Fecha y hora de finalización en formato DataTime
-              format: date-time
-    InvoiceInfo:
-      required:
-      - Amt
-      - CodeIAC
-      - InvoiceNum
-      - RqUID
-      type: object
-      properties:
-        CodeIAC:
-          type: string
-          description: Código IAC del convenio
-          example: "234658"
-        InvoiceNum:
-          maxLength: 35
+          description: Nombre de la vicepresidencia
+          maxLength: 100
           minLength: 1
+          example: texto
+        ManagementName:
           type: string
-          description: "Número de factura, obligatorio para el negocio"
-          example: "234658"
-        Amt:
-          type: number
-          description: "Valor total por pagar"
-          format: float
-          maxLength: 20
+          description: Nombre de la gerencia
+          maxLength: 100
           minLength: 1
-          example: 5000.0
-        RqUID:
-          maxLength: 30
+          example: texto
+        CellulaName:
+          type: string
+          description: Nombre de la celula
+          maxLength: 100
           minLength: 1
-          type: string
-          description: Identificador Único de la notificación o pago a reversar
-          example: "16012019001"
-        ExpDt:
-          type: string
-          description: "Fecha de expiración de la factura, en formato Date"
-          format: date
-          example: 2024-09-24
-    MsgRsHdr:
+          example: texto
       required:
-      - Status
-      type: object
-      properties:
-        Status:
-          required:
-          - AdditionalStatus
-          - EndDt
-          - Severity
-          - StatusCode
-          - StatusDesc
-          type: object
-          properties:
-            StatusCode:
-              type: string
-              description: Codigo de respuesta del API
-              example: "0"
-              enum:
-              - "0"
-              - "100"
-            Severity:
-              type: string
-              description: Codigo de severidad de la respuesta
-              example: Info
-              enum:
-              - Info
-              - Error
-            StatusDesc:
-              maxLength: 300
-              minLength: 1
-              type: string
-              description: Descripción del estado de la notificación
-              example: Transacción Exitosa
-            AdditionalStatus:
-              required:
-              - ServerStatusCode
-              - StatusDesc
-              type: object
-              properties:
-                ServerStatusCode:
-                  type: string
-                  description: Código de respuesta del servidor
-                  example: "0"
-                Severity:
-                  type: string
-                  description: Codigo de severidad de la respuesta
-                  example: Info
-                  enum:
-                  - Info
-                  - Error
-                StatusDesc:
-                  maxLength: 300
-                  minLength: 1
-                  type: string
-                  description: Descripción detallada del estado de la notificación
-                  example: Se ha reversado el recaudo
-              description: Información adicional de la respuesta
-            EndDt:
-              type: string
-              description: Fecha y hora de finalización en formato DataTime
-              format: date-time
-    RespbillAgreement:
-      required:
-      - MsgRsHdr
+        - VpName
+        - ManagementName
+        - CellulaName
+    BusquedaEmpleadosCelulaResponse:
       type: object
       properties:
         MsgRsHdr:
           $ref: '#/components/schemas/MsgRsHdr'
-    ErrorbillAgreement:
+        Listadodeempleadosquecumplenco:
+          type: array
+          items:
+            type: object
+            properties:
+              EmployeeId:
+                type: string
+                description: Identificador unico del empleado
+                maxLength: 15
+                minLength: 1
+                example: texto
+              GovIssueIdentType:
+                type: string
+                description: Tipo de documento del empleado
+                maxLength: 3
+                minLength: 1
+                example: texto
+              IdentSerialNum:
+                type: string
+                description: Numero de documento del empleado
+                maxLength: 20
+                minLength: 1
+                example: texto
+              FirstName:
+                type: string
+                description: Primer nombre del empleado
+                maxLength: 50
+                minLength: 1
+                example: texto
+              SecondNameEmployee:
+                type: string
+                description: Segundo nombre del empleado
+                maxLength: 50
+                minLength: 1
+                example: texto
+              FirstLastNameEmployee:
+                type: string
+                description: Primer apellido del empleado
+                maxLength: 50
+                minLength: 1
+                example: texto
+              SecondLastName:
+                type: string
+                description: Segundo apellido del empleado
+                maxLength: 50
+                minLength: 0
+                example: texto
+              EmailAddr:
+                type: string
+                description: Correo electronico del empleado
+                maxLength: 100
+                minLength: 1
+                example: texto
+              JobTitle:
+                type: number
+                description: Cargo del empleado
+                example: 0.0
+              Area:
+                type: string
+                description: Area o departamento del empleado
+                maxLength: 100
+                minLength: 1
+                example: texto
+              CityId:
+                type: string
+                description: Ciudad donde labora el empleado
+                maxLength: 50
+                minLength: 1
+                example: texto
+              StartDt:
+                type: string
+                description: Fecha de ingreso a la empresa
+                maxLength: 10
+                minLength: 10
+                format: date
+                example: '2026-03-24'
+              EmployeeStatus:
+                type: string
+                description: Estado actual del empleado
+                maxLength: 20
+                minLength: 1
+                example: texto
+              SupervisorName:
+                type: string
+                description: Nombre del supervisor directo del empleado
+                maxLength: 100
+                minLength: 1
+                example: texto
+            required:
+              - EmployeeId
+              - GovIssueIdentType
+              - IdentSerialNum
+              - FirstName
+              - FirstLastNameEmployee
+              - EmailAddr
+              - JobTitle
+              - Area
+              - CityId
+              - StartDt
+              - EmployeeStatus
+              - SupervisorName
+          description: Listado de empleados que cumplen con los criterios de busqueda
+          example:
+            - &id001
+              EmployeeId: texto
+              GovIssueIdentType: texto
+              IdentSerialNum: texto
+              FirstName: texto
+              SecondNameEmployee: texto
+              FirstLastNameEmployee: texto
+              SecondLastName: texto
+              EmailAddr: texto
+              JobTitle: 0.0
+              Area: texto
+              CityId: texto
+              StartDt: '2026-03-24'
+              EmployeeStatus: texto
+              SupervisorName: texto
+            - *id001
+            - *id001
       required:
-      - MsgRsHdr
+        - Listadodeempleadosquecumplenco
+    BusquedaEmpleadosCelulaResponseBusinessError:
       type: object
       properties:
         MsgRsHdr:
-          $ref: '#/components/schemas/ErrorStatus'
+          $ref: '#/components/schemas/MsgRsHdr'
+    BusquedaEmpleadosCelulaResponseError:
+      type: object
+      properties:
+        MsgRsHdr:
+          $ref: '#/components/schemas/MsgRsHdr'
+    MsgRsHdr:
+      type: object
+      required:
+        - Status
+      properties:
+        Status:
+          $ref: '#/components/schemas/Status'
+    Status:
+      type: object
+      required:
+        - Severity
+        - StatusCode
+      properties:
+        StatusCode:
+          type: string
+          maxLength: 9
+          minLength: 1
+          description: Código de respuesta
+          example: '0'
+        ServerStatusCode:
+          type: string
+          maxLength: 10
+          minLength: 1
+          description: Código de respuesta del servidor
+          example: '0'
+        Severity:
+          type: string
+          maxLength: 7
+          minLength: 4
+          description: Código de severidad de la respuesta
+          enum:
+            - Info
+            - Warning
+            - Error
+          example: Info
+        StatusDesc:
+          type: string
+          maxLength: 100
+          minLength: 1
+          description: Explicación asociada al statusCode
+          example: Transacción Exitosa (o descripción del error en caso de rechazo)
+        AdditionalStatus:
+          $ref: '#/components/schemas/AdditionalStatus'
+        EndDt:
+          type: string
+          format: date-time
+          description: Fecha de finalización
+          example: '2026-03-22T15:22:30'
+    AdditionalStatus:
+      type: object
+      properties:
+        StatusCode:
+          type: string
+          maxLength: 9
+          minLength: 1
+          description: Código de respuesta adicional
+          example: '0'
+        ServerStatusCode:
+          type: string
+          maxLength: 10
+          minLength: 1
+          description: Código de respuesta del servidor adicional
+          example: '0'
+        Severity:
+          type: string
+          maxLength: 7
+          minLength: 4
+          enum:
+            - Info
+            - Warning
+            - Error
+          example: Info
+        StatusDesc:
+          type: string
+          maxLength: 100
+          minLength: 1
+          description: Explicación del status adicional
+          example: Transacción Exitosa (o descripción del error en caso de rechazo)
