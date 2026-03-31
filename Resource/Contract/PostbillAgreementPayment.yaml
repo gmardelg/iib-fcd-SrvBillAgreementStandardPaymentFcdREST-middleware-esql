@@ -500,8 +500,8 @@ components:
       properties:
         BankId:
           type: string
-          maxLength: 9
-          minLength: 1
+          maxLength: 1
+          minLength: 9
           description: Código del banco destino.
           example: "2"
         Name:
