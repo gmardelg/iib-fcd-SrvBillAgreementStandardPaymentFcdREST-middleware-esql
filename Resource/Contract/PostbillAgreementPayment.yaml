@@ -379,7 +379,7 @@ components:
           maxLength: 10
           minLength: 1
           type: string
-          description: Codigo de respuesta del servidor
+          description: 
           example: "0"
         Severity:
           type: string
@@ -403,7 +403,6 @@ components:
           type: string
           description: "Indica fecha de finalizacion, terminacion, etc."
           format: date-time
-          example: 2026-03-05T15:22:30
     AdditionalStatus:
       type: object
       properties:
