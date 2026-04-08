@@ -38,6 +38,20 @@
       <nodes xmi:type="SRRetrieveEntity.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_10" location="507,260" name="Default" serviceVersion="1.0" depthPolicy="MatchOnly">
         <translation xmi:type="utility:ConstantString" string="RLGetConfigParams"/>
       </nodes>
+  <nodes xmi:type="ComIbmTrace.msgnode:FCMComposite_1" 
+         xmi:id="FCMComposite_1_1" 
+         location="250,150" 
+         pattern="[${Root}]"
+         destination="file"
+         filePath="/var/log/trace.txt">
+    <translation xmi:type="utility:ConstantString" string="Trace"/>
+  </nodes>
+<connections xmi:type="eflow:FCMConnection" 
+             xmi:id="FCMConnection_1" 
+             targetNode="FCMComposite_1_2" 
+             sourceNode="FCMComposite_1_1" 
+             sourceTerminalName="OutTerminal.out" 
+             targetTerminalName="InTerminal.in"/>
       <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_1" targetNode="FCMComposite_1_8" sourceNode="FCMComposite_1_10" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
       <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_2" targetNode="FCMComposite_1_5" sourceNode="FCMComposite_1_3" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in">
         <bendPoints>24,51,-118,-10</bendPoints>
